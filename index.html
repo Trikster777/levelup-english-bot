@@ -22,7 +22,6 @@
     .kicker{display:inline-flex;align-items:center;gap:.55rem;font-size:.84rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:800}
     .kicker:before{content:"";width:2.1rem;height:1px;background:currentColor}
     .section-title{font-family:"Cormorant Garamond",serif;letter-spacing:-.04em;line-height:.92;color:var(--primary)}
-    .hero h1{margin:0;font-family:"Cormorant Garamond",serif;font-size:clamp(3.2rem,7.2vw,6.9rem);letter-spacing:-.045em;line-height:.9;text-wrap:balance;color:#f7f1e7;text-shadow:0 2px 20px rgba(0,0,0,.28)}
     .section-title{margin:.9rem 0 0;font-size:clamp(2.1rem,4vw,4rem)}
     .section-lead{margin:.95rem 0 0;max-width:56rem;color:var(--soft);font-size:clamp(1rem,1.3vw,1.08rem);line-height:1.8}
     .eyebrow{display:inline-flex;align-items:center;gap:.55rem;padding:.55rem .9rem;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.84);font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;backdrop-filter:blur(16px)}
@@ -34,34 +33,38 @@
     .item-title{margin:0;font-size:1.08rem;line-height:1.35;letter-spacing:-.02em;color:var(--primary)} .item-text{margin:.7rem 0 0;color:var(--soft);line-height:1.75;font-size:.97rem}
     .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)} .reveal.is-visible{opacity:1;transform:translateY(0)}
 
-    .hero{position:relative;min-height:100svh;display:grid;align-items:stretch;color:#fff;overflow:clip;isolation:isolate;background:#201a17}
-    .hero:before{content:"";position:absolute;inset:0;background:
-      radial-gradient(circle at 14% 18%, rgba(198,137,87,.28), transparent 20%),
-      radial-gradient(circle at 82% 16%, rgba(255,255,255,.16), transparent 16%),
-      linear-gradient(180deg, rgba(20,16,14,.14), rgba(20,16,14,.22));
-      z-index:-2}
-    .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(18,16,14,.76) 0%, rgba(18,16,14,.5) 34%, rgba(18,16,14,.16) 100%);z-index:-1}
-    .hero-media{position:absolute;inset:0;z-index:-3;pointer-events:none}
-    .hero-media:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(15,13,11,.78) 0%, rgba(15,13,11,.48) 34%, rgba(15,13,11,.12) 100%);z-index:1}
-    .hero-media img{width:100%;height:100%;object-fit:cover;object-position:58% 12%;filter:saturate(.95) contrast(1.03) brightness(.98);transform:scale(1.015)}
-    .hero-inner{position:relative;z-index:2;min-height:100svh;display:grid;align-items:stretch;padding:1rem 0 1.5rem}
+    .hero{position:relative;min-height:auto;display:grid;align-items:stretch;color:var(--primary);overflow:clip;isolation:isolate;background:
+      radial-gradient(circle at 12% 18%, rgba(198,137,87,.18), transparent 22%),
+      radial-gradient(circle at 84% 14%, rgba(255,255,255,.95), transparent 20%),
+      linear-gradient(180deg, #fbf6ef 0%, #f1e8dc 100%)}
+    .hero:before{content:"";position:absolute;inset:auto -8% -20% auto;width:34rem;height:34rem;border-radius:50%;background:radial-gradient(circle, rgba(198,137,87,.12) 0%, rgba(198,137,87,.04) 46%, transparent 72%);filter:blur(12px);z-index:-2}
+    .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));z-index:-1}
+    .hero-media{display:none}
+    .hero-media:before{display:none}
+    .hero-media img{display:none}
+    .hero-inner{position:relative;z-index:2;min-height:auto;display:grid;align-items:stretch;padding:1rem 0 2.5rem}
     .hero-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.8rem}
-    .brand{display:inline-flex;align-items:center;gap:.8rem;color:#fff;font-weight:800;letter-spacing:-.03em} .brand-mark{width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg, rgba(255,255,255,.12), rgba(201,138,90,.26));border:1px solid rgba(255,255,255,.15);font-family:"Cormorant Garamond",serif;font-size:1.2rem}
-    .top-nav{display:none;gap:1.2rem;align-items:center;color:rgba(255,255,255,.8);font-size:.95rem} .top-nav a{position:relative;padding-bottom:.15rem} .top-nav a:after{content:"";position:absolute;left:0;bottom:-.08rem;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)} .top-nav a:hover:after{transform:scaleX(1)}
-    .hero-shell{display:grid;align-items:end;min-height:100svh}
-    .hero-copy{max-width:48rem;padding:clamp(1.2rem,5vw,4rem) 0 1.2rem}
-    .hero p{margin:1.25rem 0 0;max-width:37rem;font-size:clamp(1.03rem,1.6vw,1.18rem);line-height:1.82;color:rgba(255,255,255,.88)}
-    .hero-meta{display:grid;gap:.85rem;margin-top:1.5rem;color:rgba(255,255,255,.86);font-size:.96rem} .hero-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.6rem}
-    .hero-note{margin-top:1rem;max-width:32rem;color:rgba(255,255,255,.78);font-size:.92rem;line-height:1.7}
-    .hero-footer{display:grid;gap:.85rem;margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.78);font-size:.92rem;line-height:1.6}
-    .hero-footer strong{color:rgba(255,255,255,.92)}
-    .hero-poster{display:grid;gap:1.25rem;max-width:28rem;margin-top:1.5rem}
-    .hero-stamp{display:grid;gap:.5rem;padding:1rem 1.05rem;border-radius:1.4rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);box-shadow:0 20px 40px rgba(0,0,0,.12)}
-    .hero-stamp strong{font-size:1.05rem;color:#fff;letter-spacing:-.02em}
-    .hero-stamp span{color:rgba(255,255,255,.74);font-size:.94rem;line-height:1.65}
+    .brand{display:inline-flex;align-items:center;gap:.8rem;color:var(--primary);font-weight:800;letter-spacing:-.03em} .brand-mark{width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg, rgba(255,255,255,.8), rgba(201,138,90,.2));border:1px solid rgba(43,38,34,.12);font-family:"Cormorant Garamond",serif;font-size:1.2rem}
+    .top-nav{display:none;gap:1.2rem;align-items:center;color:var(--soft);font-size:.95rem} .top-nav a{position:relative;padding-bottom:.15rem} .top-nav a:after{content:"";position:absolute;left:0;bottom:-.08rem;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)} .top-nav a:hover:after{transform:scaleX(1)}
+    .hero .eyebrow{border:1px solid rgba(43,38,34,.12);background:rgba(255,255,255,.74);color:var(--soft);backdrop-filter:none}
+    .hero h1{margin:0;font-family:"Cormorant Garamond",serif;font-size:clamp(3rem,5.8vw,5.6rem);letter-spacing:-.05em;line-height:.94;text-wrap:balance;color:var(--primary);text-shadow:none;max-width:9.8ch}
+    .hero-shell{display:grid;align-items:center;min-height:calc(100svh - 4rem);gap:2rem}
+    .hero-copy{max-width:42rem;padding:clamp(1.2rem,5vw,4rem) 0 0}
+    .hero p{margin:1.1rem 0 0;max-width:34rem;font-size:clamp(1rem,1.4vw,1.14rem);line-height:1.82;color:var(--soft)}
+    .hero-meta{display:grid;gap:.75rem;margin-top:1.5rem;color:var(--primary);font-size:.98rem}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.6rem}
+    .hero-note{margin-top:1rem;max-width:31rem;color:var(--soft);font-size:.94rem;line-height:1.72}
+    .hero-footer{display:grid;gap:.85rem;margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(43,38,34,.1);color:var(--soft);font-size:.92rem;line-height:1.6}
+    .hero-footer strong{color:var(--primary)}
+    .hero-poster{display:grid;gap:1rem;align-self:end}
+    .hero-photo-card{position:relative;overflow:hidden;border-radius:2.2rem;background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(243,234,224,.96));border:1px solid rgba(43,38,34,.1);box-shadow:0 28px 60px rgba(39,27,20,.14);padding:1rem}
+    .hero-photo-card img{width:100%;height:min(70vh,46rem);object-fit:cover;object-position:58% 12%;border-radius:1.5rem;filter:saturate(.96) contrast(1.01)}
+    .hero-photo-badge{position:absolute;left:1.8rem;right:1.8rem;bottom:1.8rem;display:grid;gap:.3rem;padding:1rem 1.05rem;border-radius:1.2rem;background:rgba(24,18,15,.58);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);color:#fff}
+    .hero-photo-badge strong{font-size:1.04rem;letter-spacing:-.02em}
+    .hero-photo-badge span{color:rgba(255,255,255,.8);line-height:1.6;font-size:.93rem}
     .hero-signals{display:flex;flex-wrap:wrap;gap:.7rem}
-    .hero-signals span{display:inline-flex;align-items:center;padding:.62rem .84rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.82);font-size:.9rem}
-    .hero-drift{position:absolute;inset:auto auto 8% 8%;width:min(42vw,26rem);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle, rgba(201,138,90,.18) 0%, rgba(201,138,90,.04) 38%, transparent 72%);filter:blur(10px);z-index:-1;animation:float 14s ease-in-out infinite}
+    .hero-signals span{display:inline-flex;align-items:center;padding:.62rem .84rem;border-radius:999px;background:rgba(255,255,255,.74);border:1px solid rgba(43,38,34,.1);color:var(--primary);font-size:.9rem}
+    .hero-drift{display:none}
     @keyframes float{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(18px,-14px,0) scale(1.06)}}
 
     .quote-block{margin-top:1.8rem;padding:clamp(1.2rem,2vw,1.8rem);border-radius:var(--r-xl);border:1px solid rgba(201,138,90,.26);background:linear-gradient(135deg, rgba(201,138,90,.08), rgba(255,255,255,.5));box-shadow:var(--shadow2)}
@@ -106,7 +109,7 @@
     .mobile-cta{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:30;display:flex;gap:.75rem;padding:.75rem;border-radius:1.35rem;background:rgba(255,251,245,.76);border:1px solid rgba(43,38,34,.12);box-shadow:0 20px 42px rgba(18,18,18,.18);backdrop-filter:blur(16px)} .mobile-cta .btn{flex:1;min-width:0;font-size:.96rem}
     .skip{position:absolute;left:-999px;top:1rem;background:#fff;color:#000;padding:.7rem 1rem;border-radius:999px;z-index:100}.skip:focus{left:1rem}
     @media (min-width:760px){.subgrid-2,.pain-grid,.workflow-grid,.benefits-grid,.faq-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.subgrid-3,.trust-grid,.docs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.approach-top{grid-template-columns:1.1fr .9fr;align-items:end}.footer-inner{grid-template-columns:1.4fr .9fr;align-items:center}.trust-hero{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
-    @media (min-width:960px){.top-nav{display:inline-flex}.hero-shell{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:end;gap:2rem}.hero-copy{padding-bottom:2rem}.hero-media:before{background:linear-gradient(90deg, rgba(18,16,14,.78) 0%, rgba(18,16,14,.42) 34%, rgba(18,16,14,.08) 100%)}.docs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (min-width:960px){.top-nav{display:inline-flex}.hero-shell{grid-template-columns:minmax(0,1.02fr) minmax(22rem,.98fr);align-items:end;gap:3rem}.hero-copy{padding-bottom:2rem}.docs-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media (max-width:959px){.desktop-only{display:none!important}} @media (max-width:759px){.footer{padding-bottom:10rem}} @media (min-width:760px){.mobile-cta{display:none}}
     @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
   </style>
@@ -140,10 +143,13 @@
           <p class="hero-note">Для людей, которые устали держаться, всё время ждать плохого, бояться своих ощущений и уже не хотят просто заглушать тревогу на время.</p>
           <div class="hero-footer"><div><strong>Ключевая идея:</strong> не просто снять напряжение, а помочь увидеть и изменить механизм, который снова и снова возвращает тревогу и страх паники.</div></div>
         </div>
-        <aside class="hero-poster reveal" aria-label="Ключевые ориентиры">
-          <div class="hero-stamp">
-            <strong>Уже после первой встречи становится яснее.</strong>
-            <span>Не просто разговор “о состоянии”, а первая точка спокойствия, понимания и маршрута дальше.</span>
+        <aside class="hero-poster reveal" aria-label="Фото специалиста">
+          <div class="hero-photo-card">
+            <img src="assets/andrey-zaymogov.jpg" alt="Андрей Займогов" />
+            <div class="hero-photo-badge">
+              <strong>Уже после первой встречи становится яснее.</strong>
+              <span>Не просто разговор о состоянии, а первая точка спокойствия, понимания и маршрута дальше.</span>
+            </div>
           </div>
           <div class="hero-signals">
             <span>Меньше внутреннего хаоса</span>
@@ -402,25 +408,6 @@
       }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-      const hero = document.querySelector('.hero');
-      const media = document.querySelector('.hero-media img');
-      let raf = null;
-      const move = (event) => {
-        if (window.matchMedia('(max-width: 959px)').matches) return;
-        const rect = hero.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width;
-        const y = (event.clientY - rect.top) / rect.height;
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          media.style.transform = `scale(1.04) translate3d(${(x - 0.5) * 12}px, ${(y - 0.5) * 10}px, 0)`;
-        });
-      };
-      const reset = () => {
-        if (raf) cancelAnimationFrame(raf);
-        media.style.transform = 'scale(1.02) translate3d(0,0,0)';
-      };
-      hero.addEventListener('mousemove', move);
-      hero.addEventListener('mouseleave', reset);
     })();
   </script>
 </body>
