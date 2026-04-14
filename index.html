@@ -52,18 +52,18 @@
     .brand{display:inline-flex;align-items:center;gap:.8rem;color:var(--primary);font-weight:800;letter-spacing:-.03em} .brand-mark{width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.52);border:1px solid rgba(43,38,34,.10);font-family:"Prata",serif;font-size:1rem}
     .top-nav{display:none;gap:1.2rem;align-items:center;color:var(--soft);font-size:.95rem} .top-nav a{position:relative;padding-bottom:.15rem} .top-nav a:after{content:"";position:absolute;left:0;bottom:-.08rem;width:100%;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)} .top-nav a:hover:after{transform:scaleX(1)}
     .hero .eyebrow{border:1px solid rgba(43,38,34,.12);background:rgba(255,255,255,.74);color:var(--soft);backdrop-filter:none}
-    .hero h1{margin:0;font-family:"Prata",serif;font-size:clamp(2.8rem,5vw,4.9rem);letter-spacing:-.035em;line-height:1.02;text-wrap:balance;color:var(--primary);max-width:8.2ch}
+    .hero h1{margin:0;font-family:"Prata",serif;font-size:clamp(2.45rem,4.15vw,4.05rem);letter-spacing:-.03em;line-height:1.1;text-wrap:balance;color:var(--primary);max-width:9.4ch}
     .hero-shell{display:grid;align-items:stretch;min-height:calc(100svh - 3rem);gap:1.5rem}
-    .hero-copy{max-width:38rem;padding:clamp(1.2rem,5vw,4rem) 0 0}
+    .hero-copy{max-width:35rem;padding:clamp(1rem,4vw,3.2rem) 0 0}
     .hero p{margin:1rem 0 0;max-width:31rem;font-size:clamp(1rem,1.35vw,1.08rem);line-height:1.76;color:var(--soft)}
     .hero-meta{display:grid;gap:.65rem;margin-top:1.6rem;padding-top:1.25rem;border-top:1px solid rgba(43,38,34,.12);color:var(--primary);font-size:.98rem}
     .hero-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.6rem}
     .hero-note{margin-top:1rem;max-width:29rem;color:var(--soft);font-size:.95rem;line-height:1.72}
-    .hero-footer{display:grid;gap:.85rem;margin-top:2rem;padding-top:1.1rem;border-top:1px solid rgba(43,38,34,.1);color:var(--soft);font-size:.92rem;line-height:1.6;max-width:30rem}
+    .hero-footer{display:grid;gap:.85rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(43,38,34,.1);color:var(--soft);font-size:.92rem;line-height:1.6;max-width:29rem}
     .hero-footer strong{color:var(--primary)}
-    .hero-poster{display:grid;gap:1rem;align-self:center;padding:0 0 0 2rem}
+    .hero-poster{display:grid;gap:1rem;align-self:start;padding:0 0 0 1.25rem;margin-top:-1.25rem}
     .hero-photo-card{position:relative;overflow:hidden;border-radius:2rem;min-height:100%;background:rgba(255,255,255,.36);border:1px solid rgba(43,38,34,.08);box-shadow:var(--shadow2)}
-    .hero-photo-card img{width:100%;height:100%;min-height:min(68vh,42rem);object-fit:cover;object-position:48% 10%;filter:saturate(.92) contrast(1.02)}
+    .hero-photo-card img{width:100%;height:100%;min-height:min(76vh,47rem);object-fit:cover;object-position:46% 8%;filter:saturate(.92) contrast(1.02)}
     .hero-photo-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(31,24,19,.12) 100%)}
     .hero-photo-badge{display:none}
     .hero-signals{display:grid;gap:.8rem;padding:.25rem 0 0;color:var(--primary)}
@@ -111,7 +111,7 @@
     .mobile-cta{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:30;display:flex;gap:.75rem;padding:.75rem;border-radius:1.35rem;background:rgba(255,251,245,.76);border:1px solid rgba(43,38,34,.12);box-shadow:0 20px 42px rgba(18,18,18,.18);backdrop-filter:blur(16px)} .mobile-cta .btn{flex:1;min-width:0;font-size:.96rem}
     .skip{position:absolute;left:-999px;top:1rem;background:#fff;color:#000;padding:.7rem 1rem;border-radius:999px;z-index:100}.skip:focus{left:1rem}
     @media (min-width:760px){.subgrid-2,.pain-grid,.workflow-grid,.benefits-grid,.faq-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.subgrid-3,.trust-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.approach-top{grid-template-columns:1.1fr .9fr;align-items:end}.footer-inner{grid-template-columns:1.4fr .9fr;align-items:center}.trust-hero{grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr)}.cta-layout{grid-template-columns:minmax(0,1.15fr) minmax(17rem,.85fr)}}
-    @media (min-width:960px){.top-nav{display:inline-flex}.hero-shell{grid-template-columns:minmax(0,1fr) minmax(21rem,.82fr);align-items:center;gap:2.5rem}.hero-copy{padding:3rem 1rem 2.5rem 0}}
+    @media (min-width:960px){.top-nav{display:inline-flex}.hero-shell{grid-template-columns:minmax(0,.92fr) minmax(24rem,.95fr);align-items:start;gap:1.6rem}.hero-copy{padding:2.4rem 1.2rem 2.1rem 0}}
     @media (max-width:959px){.hero{background:linear-gradient(180deg,#fbf7f1 0%,#f1e7dc 100%)}.hero:before{display:none}.hero-poster{padding:0}.hero-photo-card{border-top:1px solid rgba(43,38,34,.08);border-radius:1.6rem;overflow:hidden}.hero-photo-card img{min-height:24rem;object-position:50% 12%}.hero-signals{padding:1rem 0 0}}
     @media (max-width:959px){.desktop-only{display:none!important}} @media (max-width:759px){.footer{padding-bottom:10rem}} @media (min-width:760px){.mobile-cta{display:none}}
     @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.reveal{opacity:1;transform:none}}
@@ -151,7 +151,7 @@
           </div>
           <div class="hero-signals">
             <span><strong>Спокойный формат</strong>Онлайн-встреча из привычного места, без дороги и лишнего напряжения.</span>
-            <span><strong>Без ощущения риска</strong>Если после первой встречи не будет внутреннего сдвига, её можно не оплачивать.</span>
+            <span><strong>Прозрачные условия</strong>Стоимость и гарантия видны сразу, без переписки и скрытых условий.</span>
           </div>
         </aside>
       </div>
@@ -187,7 +187,7 @@
         <div class="pain-grid">
           <article class="card"><div class="card-body"><h3 class="item-title">Работа и повседневность</h3><p class="item-text">Становится труднее концентрироваться, выдерживать нагрузку и не срываться в прокручивание сценариев. Много сил уходит не на жизнь, а на попытку всё удержать.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Тело и ощущения</h3><p class="item-text">Сердцебиение, дыхание, слабость или напряжение начинают пугать сами по себе. Из-за этого тревога замыкается на теле ещё сильнее.</p></div></article>
-          <article class="card"><div class="card-body"><h3 class="item-title">Отношения и близость</h3><p class="item-text">Сложнее быть рядом спокойно. Внутри слишком много контроля, усталости и ожидания, что сейчас снова станет хуже.</p></div></article>
+          <article class="card"><div class="card-body"><h3 class="item-title">Отношения и близость</h3><p class="item-text">Тревога редко остаётся только внутри. Она начинает портить контакт с близкими: сложнее разговаривать спокойно, сложнее расслабляться рядом, чаще появляются раздражение, закрытость или желание отдалиться. Даже там, где есть любовь, становится меньше лёгкости и больше напряжения.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Ощущение жизни</h3><p class="item-text">Со временем появляется чувство, что вы не живёте, а всё время выдерживаете что-то напряжённое и пытаетесь не сорваться.</p></div></article>
         </div>
       </div>
@@ -231,7 +231,7 @@
           <div class="timeline-step"><h3>3. Усиливается контроль</h3><p>Человек начинает проверять себя, срочно успокаивать, отвлекать, объяснять происходящее или пытаться немедленно убрать состояние.</p></div>
           <div class="timeline-step"><h3>4. Тревога закрепляется</h3><p>Психика начинает воспринимать саму тревогу как угрозу. И круг повторяется снова.</p></div>
         </div>
-        <div class="quote-block"><p>Задача работы — не просто пережить цикл, а изменить то, что его удерживает.</p><span>Когда механизм становится понятнее, тревога перестаёт быть хаотичной и непредсказуемой, а у человека появляется больше пространства для спокойствия.</span></div>
+        <div class="quote-block"><p>Задача работы — не просто пережить цикл, а изменить сам способ, которым тревога закрепляется.</p><span>Когда механизм становится яснее, тревога перестаёт казаться хаотичной и непредсказуемой, а у человека появляется больше пространства для жизни.</span></div>
       </div>
     </section>
 
@@ -243,7 +243,7 @@
           <article class="card"><div class="card-body"><h3 class="item-title">Разбор именно вашей ситуации</h3><p class="item-text">Мы смотрим не на усреднённую тревогу вообще, а на ваши симптомы, страхи, реакции тела, мысли и ситуации, в которых состояние усиливается именно у вас.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Понимание того, что удерживает тревогу</h3><p class="item-text">Часто человек впервые видит не только симптомы, а сам механизм, который запускает и закрепляет состояние.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Первый внутренний сдвиг уже в разговоре</h3><p class="item-text">Задача встречи не просто познакомиться, а помочь вам почувствовать больше опоры, безопасности и собранности уже на старте.</p></div></article>
-          <article class="card"><div class="card-body"><h3 class="item-title">Более спокойное отношение к своим ощущениям</h3><p class="item-text">Когда состояние становится понятнее, снижается часть страха, а вместе с ней уменьшается и постоянное внутреннее напряжение.</p></div></article>
+          <article class="card"><div class="card-body"><h3 class="item-title">Более спокойное отношение к своим ощущениям</h3><p class="item-text">Когда состояние перестаёт казаться хаотичным, снижается часть страха, а вместе с ней уменьшается и постоянное внутреннее напряжение.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Ощущение, что с этим можно работать</h3><p class="item-text">Вы уходите не с мыслью «со мной что-то не так», а с более понятной картиной и ощущением, что выход есть.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Понимание, как двигаться дальше</h3><p class="item-text">После первой встречи обычно становится ясно, нужен ли вам дальнейший формат работы и какой именно, без давления и навязывания.</p></div></article>
         </div>
@@ -258,7 +258,7 @@
         <div class="workflow-grid">
           <article class="card"><div class="card-body"><h3 class="item-title">Сначала разбираем текущее состояние</h3><p class="item-text">Смотрим, когда тревога усиливается, чего вы больше всего боитесь и как на это реагирует тело.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Потом становится виден сам механизм</h3><p class="item-text">Появляется понимание не только того, что вы чувствуете, но и того, что именно удерживает это состояние.</p></div></article>
-          <article class="card"><div class="card-body"><h3 class="item-title">Уже на первой встрече появляется опора</h3><p class="item-text">Обычно после консультации становится спокойнее и появляется более понятный ориентир, как двигаться дальше.</p></div></article>
+          <article class="card"><div class="card-body"><h3 class="item-title">Уже на первой встрече появляется опора</h3><p class="item-text">Обычно после консультации становится легче ориентироваться в состоянии и понятнее, как двигаться дальше.</p></div></article>
         </div>
       </div>
     </section>
@@ -284,7 +284,7 @@
           <article class="card"><div class="card-body"><h3 class="item-title">Не только с симптомами, а с тем, что их удерживает</h3><p class="item-text">Задача не в том, чтобы на время приглушить тревогу, а в том, чтобы разобраться, почему она снова и снова возвращается именно у вас.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Понятно и без перегруза</h3><p class="item-text">Я не прячу смысл за терминологией. Важно, чтобы после встречи вам было легче ориентироваться в происходящем, а не тяжелее от новых сложных слов.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Бережно, но конкретно</h3><p class="item-text">Без попытки резко ломать защиту, но и без растягивания на бесконечное просто поговорить. Работа идёт в спокойном и понятном темпе.</p></div></article>
-          <article class="card"><div class="card-body"><h3 class="item-title">С опорой уже на старте</h3><p class="item-text">Первая встреча нужна не для формального знакомства. Её задача — дать больше понимания, опоры и ощущение, что движение уже началось.</p></div></article>
+          <article class="card"><div class="card-body"><h3 class="item-title">С опорой уже на старте</h3><p class="item-text">Первая встреча нужна не для формального знакомства. Её задача — дать больше понимания и ощущение, что движение уже началось.</p></div></article>
         </div>
       </div>
     </section>
@@ -295,7 +295,7 @@
         <h2 class="section-title">Первый шаг и так даётся непросто. Здесь не нужно брать на себя лишний риск.</h2>
         <p class="section-lead">Если вы уже пробовали разную помощь и боитесь снова потратить силы зря, здесь есть простая и спокойная гарантия.</p>
         <div class="subgrid-2">
-          <article class="card"><div class="card-body"><h3 class="item-title">Как это работает</h3><p class="item-text">Если после первой встречи вы не почувствуете, что стало понятнее, спокойнее или хотя бы чуть сдвинулось внутреннее ощущение тупика, её можно не оплачивать.</p></div></article>
+          <article class="card"><div class="card-body"><h3 class="item-title">Как это работает</h3><p class="item-text">Если после первой встречи вы не почувствуете, что внутри стало яснее, спокойнее или хотя бы чуть сдвинулось ощущение тупика, её можно не оплачивать.</p></div></article>
           <article class="card"><div class="card-body"><h3 class="item-title">Без неудобных объяснений</h3><p class="item-text">Без споров, без давления и без необходимости оправдываться. Гарантия нужна не для рекламы, а чтобы первый шаг был чуть легче.</p></div></article>
         </div>
       </div>
@@ -308,7 +308,7 @@
         <div class="faq-grid">
           <details class="card"><summary class="card-body"><div class="faq-head"><h3>Что, если я не смогу нормально объяснить, что со мной происходит?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Это нормально. На первой встрече не нужно говорить идеально или приносить готовую формулировку. Достаточно прийти с тем, что есть, и мы спокойно разберёмся по ходу разговора.</div></details>
           <details class="card"><summary class="card-body"><div class="faq-head"><h3>Если у меня именно панические атаки, а не просто тревога?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Это одна из ключевых тем работы. Важно не только переживать приступы, но и понимать, почему они запускаются и что удерживает страх их повторения.</div></details>
-          <details class="card"><summary class="card-body"><div class="faq-head"><h3>Сколько встреч понадобится?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Это зависит от глубины состояния, длительности тревоги и того, как именно она проявляется. После первой встречи обычно становится понятнее, какой формат работы нужен именно вам.</div></details>
+          <details class="card"><summary class="card-body"><div class="faq-head"><h3>Сколько встреч понадобится?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Это зависит от глубины состояния, длительности тревоги и того, как именно она проявляется. После первой встречи обычно уже видно, какой формат работы нужен именно вам.</div></details>
           <details class="card"><summary class="card-body"><div class="faq-head"><h3>Как проходит онлайн-формат?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Встреча проходит онлайн, поэтому можно подключиться из привычного места без дороги и дополнительного напряжения. Это часто делает первый шаг чуть легче.</div></details>
           <details class="card"><summary class="card-body"><div class="faq-head"><h3>Что, если я боюсь, что станет хуже, когда начну говорить?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Поэтому здесь важен бережный темп. Работа строится так, чтобы не перегружать человека и не толкать его глубже, чем он сейчас может выдержать.</div></details>
           <details class="card"><summary class="card-body"><div class="faq-head"><h3>Нужно ли готовиться к встрече заранее?</h3><span class="icon">+</span></div></summary><div class="card-body faq-content">Нет. Если захотите, можно просто выписать, что больше всего беспокоит. Но обязательной подготовки нет: важно прийти в живом состоянии, а не с идеально собранным рассказом.</div></details>
