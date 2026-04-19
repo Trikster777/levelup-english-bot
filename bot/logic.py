@@ -421,7 +421,7 @@ def build_mission_success_feedback(task: Task) -> str:
             "",
             f"<b>Почему это работает:</b> {task.explanation}",
             "",
-            "Запомни этот ход и держим темп дальше.",
+            "Всё, молодец. Двигаемся дальше.",
         ]
     )
 
