@@ -11,7 +11,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 from .config import get_settings
 from .content import Task, get_boss, get_boss_tasks, get_mission_tasks
 from .db import create_connection
-from .gemini import GeminiClient, build_summary_prompt, build_tutor_prompt
+from .gemini import GeminiClient, build_error_coach_prompt, build_summary_prompt, build_tutor_prompt
 from .logic import (
     SessionState,
     add_review_item,
@@ -69,6 +69,19 @@ async def ask_tutor(question: str) -> str | None:
     if gemini_client is None:
         return None
     return await asyncio.to_thread(gemini_client.generate_text, build_tutor_prompt(question))
+
+
+async def generate_error_coach(stage: str, task: Task, chosen_answer: str) -> str | None:
+    if gemini_client is None:
+        return None
+    prompt = build_error_coach_prompt(
+        stage=stage,
+        prompt=task.prompt,
+        chosen_answer=chosen_answer,
+        correct_answer=task.options[task.correct_index],
+        explanation=task.explanation,
+    )
+    return await asyncio.to_thread(gemini_client.generate_text, prompt)
 
 
 def local_tutor_fallback(question: str) -> str | None:
@@ -604,6 +617,9 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             state.correct_answers += 1
         else:
             add_review_item(connection, callback.from_user.id, task, "mission")
+            ai_error = await generate_error_coach("mission", task, task.options[answer_index])
+            if ai_error:
+                await callback.message.answer(ai_error)
         state.task_index += 1
         if state.task_index >= len(mission_tasks):
             complete_mission(connection, callback.from_user.id, mission, state.correct_answers)
@@ -632,6 +648,9 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             callback_notice = "Принято"
         else:
             add_review_item(connection, callback.from_user.id, task, "boss")
+            ai_error = await generate_error_coach("final_check", task, task.options[answer_index])
+            if ai_error:
+                await callback.message.answer(ai_error)
         state.task_index += 1
         if state.task_index >= len(boss_tasks):
             next_chapter = complete_boss(connection, callback.from_user.id, state.chapter_id, boss, state.correct_answers)
@@ -667,6 +686,10 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             remove_review_item(connection, callback.from_user.id, task.id)
             state.correct_answers += 1
             callback_notice = "Принято"
+        else:
+            ai_error = await generate_error_coach("review", task, task.options[answer_index])
+            if ai_error:
+                await callback.message.answer(ai_error)
         state.task_index += 1
         if state.task_index >= len(tasks):
             review_task_store.pop(callback.from_user.id, None)
