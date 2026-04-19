@@ -19,7 +19,8 @@ from .logic import (
     build_boss_intro,
     build_boss_result,
     build_chapter_complete_text,
-    build_feedback_detailed,
+    build_checkpoint_feedback,
+    build_mission_feedback,
     build_mission_intro,
     build_mission_result_detailed,
     build_next_mission_text,
@@ -510,12 +511,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         return
 
     answer_index = int(callback.data.split(":")[-1])
+    callback_notice = ""
 
     if prefix == "placement_answer":
         tasks = get_placement_items()
         task = tasks[state.task_index]
         is_correct = answer_index == task.correct_index
-        await callback.message.answer(build_feedback_detailed(is_correct, task))
         if is_correct:
             state.correct_answers += 1
         state.task_index += 1
@@ -529,6 +530,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
                 await callback.message.answer(ai_summary)
             await start_next_mission(callback.message.chat.id, callback.from_user.id, callback.from_user.first_name or "Player")
         else:
+            callback_notice = "Ответ принят"
             await send_next_task(callback.message.chat.id, callback.from_user.id)
 
     elif prefix == "mission_answer":
@@ -536,7 +538,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         mission_tasks = get_mission_tasks(state.chapter_id, mission.id, get_user_level(connection, callback.from_user.id))
         task = mission_tasks[state.task_index]
         is_correct = answer_index == task.correct_index
-        await callback.message.answer(build_feedback_detailed(is_correct, task))
+        await callback.message.answer(build_mission_feedback(is_correct, task))
         if is_correct:
             state.correct_answers += 1
         else:
@@ -561,9 +563,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         boss_tasks = get_boss_tasks(state.chapter_id, get_user_level(connection, callback.from_user.id))
         task = boss_tasks[state.task_index]
         is_correct = answer_index == task.correct_index
-        await callback.message.answer(build_feedback_detailed(is_correct, task))
+        checkpoint_feedback = build_checkpoint_feedback(is_correct, task)
+        if checkpoint_feedback:
+            await callback.message.answer(checkpoint_feedback)
         if is_correct:
             state.correct_answers += 1
+            callback_notice = "Принято"
         else:
             add_review_item(connection, callback.from_user.id, task, "boss")
         state.task_index += 1
@@ -587,10 +592,13 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             return
         task = tasks[state.task_index]
         is_correct = answer_index == task.correct_index
-        await callback.message.answer(build_feedback_detailed(is_correct, task))
+        checkpoint_feedback = build_checkpoint_feedback(is_correct, task)
+        if checkpoint_feedback:
+            await callback.message.answer(checkpoint_feedback)
         if is_correct:
             remove_review_item(connection, callback.from_user.id, task.id)
             state.correct_answers += 1
+            callback_notice = "Принято"
         state.task_index += 1
         if state.task_index >= len(tasks):
             review_task_store.pop(callback.from_user.id, None)
@@ -599,7 +607,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         else:
             await send_next_task(callback.message.chat.id, callback.from_user.id)
 
-    await callback.answer()
+    await callback.answer(callback_notice)
 
 
 @dp.callback_query(F.data.startswith("placement_answer:"))

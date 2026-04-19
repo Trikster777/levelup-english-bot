@@ -396,6 +396,33 @@ def build_feedback_detailed(is_correct: bool, task: Task) -> str:
     )
 
 
+def build_mission_success_feedback(task: Task) -> str:
+    correct_answer = task.options[task.correct_index]
+    return "\n".join(
+        [
+            "<b>Засчитано.</b>",
+            "",
+            f"<b>Правильный вариант:</b> {correct_answer}",
+            "",
+            f"<b>Почему это работает:</b> {task.explanation}",
+            "",
+            "Запомни этот ход и держим темп дальше.",
+        ]
+    )
+
+
+def build_mission_feedback(is_correct: bool, task: Task) -> str:
+    if is_correct:
+        return build_mission_success_feedback(task)
+    return build_feedback_detailed(False, task)
+
+
+def build_checkpoint_feedback(is_correct: bool, task: Task) -> str | None:
+    if is_correct:
+        return None
+    return build_feedback_detailed(False, task)
+
+
 def build_mission_result(correct_answers: int, total: int, xp_reward: int) -> str:
     return "\n".join(
         [
