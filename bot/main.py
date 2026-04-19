@@ -148,13 +148,19 @@ def home_keyboard() -> InlineKeyboardMarkup:
 
 def mission_complete_keyboard(user_id: int, accuracy: int) -> InlineKeyboardMarkup:
     next_mission = get_next_mission(connection, user_id)
+    pending = get_review_count(connection, user_id)
     buttons: list[list[InlineKeyboardButton]] = []
 
     if next_mission is not None:
-        buttons.append([InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}")])
-    elif has_review_tasks(connection, user_id):
-        pending = get_review_count(connection, user_id)
-        buttons.append([InlineKeyboardButton(text=f"Разобрать ошибки ({pending})", callback_data="review:start")])
+        row: list[InlineKeyboardButton] = []
+        if pending > 0:
+            review_label = "Разобрать ошибку" if pending == 1 else f"Разобрать ошибки ({pending})"
+            row.append(InlineKeyboardButton(text=review_label, callback_data="review:start"))
+        row.append(InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}"))
+        buttons.append(row)
+    elif pending > 0:
+        review_label = "Разобрать ошибку" if pending == 1 else f"Разобрать ошибки ({pending})"
+        buttons.append([InlineKeyboardButton(text=review_label, callback_data="review:start")])
     else:
         buttons.append([InlineKeyboardButton(text="К финальному чеку", callback_data="boss:start")])
 
