@@ -272,6 +272,22 @@ def get_review_tasks(connection: sqlite3.Connection, telegram_user_id: int) -> l
     return [tasks_by_id[row["task_id"]] for row in rows if row["task_id"] in tasks_by_id]
 
 
+def has_review_tasks(connection: sqlite3.Connection, telegram_user_id: int) -> bool:
+    row = connection.execute(
+        "SELECT 1 FROM review_queue WHERE telegram_user_id = ? LIMIT 1",
+        (telegram_user_id,),
+    ).fetchone()
+    return row is not None
+
+
+def get_review_count(connection: sqlite3.Connection, telegram_user_id: int) -> int:
+    row = connection.execute(
+        "SELECT COUNT(*) AS total FROM review_queue WHERE telegram_user_id = ?",
+        (telegram_user_id,),
+    ).fetchone()
+    return int(row["total"]) if row else 0
+
+
 def add_xp(connection: sqlite3.Connection, telegram_user_id: int, xp: int) -> None:
     connection.execute(
         "UPDATE users SET xp = xp + ? WHERE telegram_user_id = ?",
@@ -287,10 +303,7 @@ def get_profile_text(connection: sqlite3.Connection, telegram_user_id: int) -> s
     xp = int(profile["xp"])
     chapter = get_current_chapter(connection, telegram_user_id)
     completed = sum(1 for mission in chapter.missions if is_mission_completed(connection, telegram_user_id, mission.id))
-    review_count = connection.execute(
-        "SELECT COUNT(*) AS total FROM review_queue WHERE telegram_user_id = ?",
-        (telegram_user_id,),
-    ).fetchone()["total"]
+    review_count = get_review_count(connection, telegram_user_id)
 
     placement_state = "пройден" if profile["placement_completed"] else "не пройден"
 
@@ -318,6 +331,8 @@ def get_chapter_summary(connection: sqlite3.Connection, telegram_user_id: int) -
 
     if is_boss_completed(connection, telegram_user_id, chapter.boss.id):
         boss_state = "пройден"
+    elif completed == total and has_review_tasks(connection, telegram_user_id):
+        boss_state = "ждет добивку ошибок"
     elif completed == total:
         boss_state = "открыт"
     else:

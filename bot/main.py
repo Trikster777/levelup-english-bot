@@ -35,9 +35,11 @@ from .logic import (
     get_next_mission,
     get_placement_items,
     get_profile_text,
+    get_review_count,
     get_review_tasks,
     get_task_prompt,
     get_user_level,
+    has_review_tasks,
     is_boss_completed,
     is_boss_unlocked,
     is_placement_completed,
@@ -137,7 +139,6 @@ def home_keyboard() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(text="Профиль", callback_data="nav:profile"),
             ],
             [
-                InlineKeyboardButton(text="Реванш", callback_data="nav:review"),
                 InlineKeyboardButton(text="Финальный чек", callback_data="nav:boss"),
             ],
             [InlineKeyboardButton(text="Сбросить прогресс", callback_data="nav:restart")],
@@ -147,15 +148,15 @@ def home_keyboard() -> InlineKeyboardMarkup:
 
 def mission_complete_keyboard(user_id: int, accuracy: int) -> InlineKeyboardMarkup:
     next_mission = get_next_mission(connection, user_id)
-    buttons: list[list[InlineKeyboardButton]] = [
-        [InlineKeyboardButton(text="Реванш", callback_data="nav:review")]
-    ]
+    buttons: list[list[InlineKeyboardButton]] = []
 
-    if accuracy >= 80:
-        if next_mission is not None:
-            buttons[0].append(InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}"))
-        else:
-            buttons[0].append(InlineKeyboardButton(text="К финальному чеку", callback_data="boss:start"))
+    if next_mission is not None:
+        buttons.append([InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}")])
+    elif has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        buttons.append([InlineKeyboardButton(text=f"Разобрать ошибки ({pending})", callback_data="review:start")])
+    else:
+        buttons.append([InlineKeyboardButton(text="К финальному чеку", callback_data="boss:start")])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
@@ -200,11 +201,20 @@ async def show_mission(chat_id: int, user_id: int, first_name: str) -> None:
 
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        await bot.send_message(
-            chat_id,
-            build_chapter_complete_text(get_chapter_summary(connection, user_id)),
-            reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
-        )
+        if has_review_tasks(connection, user_id):
+            pending = get_review_count(connection, user_id)
+            await bot.send_message(
+                chat_id,
+                build_chapter_complete_text(get_chapter_summary(connection, user_id))
+                + f"\n\n<b>Перед финальным чеком:</b> добей {pending} ошибок, которые накопились по ходу главы.",
+                reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
+            )
+        else:
+            await bot.send_message(
+                chat_id,
+                build_chapter_complete_text(get_chapter_summary(connection, user_id)),
+                reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
+            )
         return
 
     await bot.send_message(
@@ -233,13 +243,17 @@ async def show_review(chat_id: int, user_id: int, first_name: str) -> None:
     if not tasks:
         await bot.send_message(
             chat_id,
-            "<b>Реванш пока пустой.</b>\n\nСначала пройди миссии, потом будет что добивать.",
-            reply_markup=home_keyboard(),
+            "<b>Добивка ошибок пока пустая.</b>\n\nСначала пройди миссии, чтобы появился материал для предфинального захода.",
+            reply_markup=action_keyboard("nav:mission", "Вернуться к миссиям"),
         )
         return
 
     review_task_store[user_id] = tasks
     session_store[user_id] = SessionState(mode="review", chapter_id=get_current_chapter(connection, user_id).id, content_id="review")
+    await bot.send_message(
+        chat_id,
+        f"<b>Предфинальный разбор</b>\n\nСейчас быстро добьем {len(tasks)} слабых мест и только потом выйдем на финальный чек.",
+    )
     await send_next_task(chat_id, user_id)
 
 
@@ -262,7 +276,16 @@ async def show_boss(chat_id: int, user_id: int, first_name: str) -> None:
         await bot.send_message(chat_id, get_chapter_summary(connection, user_id), reply_markup=home_keyboard())
         return
 
-    await bot.send_message(chat_id, build_boss_intro(chapter.boss), reply_markup=action_keyboard("boss:start", "Открыть босса"))
+    if has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        await bot.send_message(
+            chat_id,
+            f"<b>Финальный чек пока не открыт.</b>\n\nПеред ним нужно добить накопившиеся ошибки: {pending} вопросов.",
+            reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
+        )
+        return
+
+    await bot.send_message(chat_id, build_boss_intro(chapter.boss), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
 
 
 async def send_next_task(chat_id: int, user_id: int) -> None:
@@ -292,16 +315,25 @@ async def send_next_task(chat_id: int, user_id: int) -> None:
         tasks = review_task_store.get(user_id, [])
         if not tasks:
             session_store.pop(user_id, None)
-            await bot.send_message(chat_id, "<b>Реванш закончился.</b>", reply_markup=home_keyboard())
+            await bot.send_message(chat_id, "<b>Разбор ошибок закрыт.</b>", reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
             return
         task = tasks[state.task_index]
-        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(tasks), "Реванш"), reply_markup=answer_keyboard(task, "review_answer"))
+        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(tasks), "Разбор ошибок"), reply_markup=answer_keyboard(task, "review_answer"))
 
 
 async def send_next_mission_offer(chat_id: int, user_id: int) -> None:
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
+        if has_review_tasks(connection, user_id):
+            pending = get_review_count(connection, user_id)
+            await bot.send_message(
+                chat_id,
+                build_chapter_complete_text(get_chapter_summary(connection, user_id))
+                + f"\n\n<b>Следующий шаг:</b> добить {pending} ошибок перед финальным чеком.",
+                reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
+            )
+        else:
+            await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
         return
     await bot.send_message(chat_id, build_next_mission_text(next_mission), reply_markup=action_keyboard(f"mission:start:{next_mission.id}", "Идти дальше"))
 
@@ -310,7 +342,16 @@ async def start_next_mission(chat_id: int, user_id: int, first_name: str) -> Non
     bootstrap_user(user_id, first_name)
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
+        if has_review_tasks(connection, user_id):
+            pending = get_review_count(connection, user_id)
+            await bot.send_message(
+                chat_id,
+                build_chapter_complete_text(get_chapter_summary(connection, user_id))
+                + f"\n\n<b>Дальше по сценарию:</b> разбираем {pending} ошибок и только потом идем в финальный чек.",
+                reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
+            )
+        else:
+            await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
         return
     session_store[user_id] = SessionState(
         mode="mission",
@@ -354,8 +395,8 @@ async def recover_lost_session(callback: CallbackQuery, prefix: str) -> None:
 
     if prefix == "review_answer":
         await callback.message.answer(
-            "<b>Реванш слетел.</b>\n\nСобираю его заново.",
-            reply_markup=action_keyboard("nav:review", "Вернуться к реваншу"),
+            "<b>Разбор ошибок слетел.</b>\n\nСобираю его заново.",
+            reply_markup=action_keyboard("review:start", "Вернуться к разбору"),
         )
         await callback.answer()
         return
@@ -370,7 +411,7 @@ async def cmd_start(message: Message) -> None:
 async def cmd_help(message: Message) -> None:
     bootstrap_user(message.from_user.id, message.from_user.first_name or "Player")
     await message.answer(
-        "<b>Как это устроено</b>\n1. Сначала проходишь стартовый тест.\n2. Потом идешь по миссиям одну за другой.\n3. Где ошибся, там потом будет реванш.\n4. Закрываешь главу и выходишь на босса.\n\nЕсли хочешь просто спросить что-то по английскому, пиши вопрос прямо сюда.",
+        "<b>Как это устроено</b>\n1. Сначала проходишь стартовый тест.\n2. Потом идешь по миссиям одну за другой.\n3. Ошибки копятся по ходу главы и потом выходят в отдельный разбор.\n4. После разбора выходишь на финальный чек.\n\nЕсли хочешь просто спросить что-то по английскому, пиши вопрос прямо сюда.",
         reply_markup=home_keyboard(),
     )
 
@@ -409,6 +450,12 @@ async def nav_profile(callback: CallbackQuery) -> None:
 
 @dp.callback_query(F.data == "nav:review")
 async def nav_review(callback: CallbackQuery) -> None:
+    await show_review(callback.message.chat.id, callback.from_user.id, callback.from_user.first_name or "Player")
+    await callback.answer()
+
+
+@dp.callback_query(F.data == "review:start")
+async def review_start(callback: CallbackQuery) -> None:
     await show_review(callback.message.chat.id, callback.from_user.id, callback.from_user.first_name or "Player")
     await callback.answer()
 
@@ -498,8 +545,16 @@ async def boss_start(callback: CallbackQuery) -> None:
         await callback.message.answer("<b>Босс пока закрыт.</b>\n\nСначала добей все миссии этой главы.", reply_markup=home_keyboard())
         await callback.answer()
         return
+    if has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        await callback.message.answer(
+            f"<b>Рано в финальный чек.</b>\n\nСначала разберем {pending} накопившихся ошибок, чтобы не тащить их в финал.",
+            reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
+        )
+        await callback.answer()
+        return
     session_store[user_id] = SessionState(mode="boss", chapter_id=chapter.id, content_id=chapter.boss.id)
-    await callback.message.answer("<b>Окей. Врубаем режим босса.</b>")
+    await callback.message.answer("<b>Окей. Врубаем финальный чек.</b>")
     await send_next_task(callback.message.chat.id, user_id)
     await callback.answer()
 
@@ -587,7 +642,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         tasks = review_task_store.get(callback.from_user.id, [])
         if not tasks:
             session_store.pop(callback.from_user.id, None)
-            await callback.message.answer("<b>Реванш закрыт.</b>", reply_markup=home_keyboard())
+            await callback.message.answer("<b>Разбор ошибок уже закрыт.</b>", reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
             await callback.answer()
             return
         task = tasks[state.task_index]
@@ -603,7 +658,10 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         if state.task_index >= len(tasks):
             review_task_store.pop(callback.from_user.id, None)
             session_store.pop(callback.from_user.id, None)
-            await callback.message.answer("<b>Реванш закрыт.</b>", reply_markup=home_keyboard())
+            await callback.message.answer(
+                "<b>Разбор ошибок закрыт.</b>\n\nСлабые места добили. Теперь можно идти в финальный чек.",
+                reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
+            )
         else:
             await send_next_task(callback.message.chat.id, callback.from_user.id)
 
