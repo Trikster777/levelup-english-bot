@@ -576,6 +576,286 @@ CHECK_PLUS = _tasks(
 )
 
 
+PAST_EVENTS = _tasks(
+    "past_events",
+    "past_simple",
+    [
+        ("Выбери правильную фразу:", ("I watched a film last night.", "I watch a film last night.", "I watched a film last night yesterday."), 0, "С `last night` нужен Past Simple: `watched`."),
+        ("Выбери правильную фразу:", ("She went to school yesterday.", "She goed to school yesterday.", "She goes to school yesterday."), 0, "У `go` в прошедшем времени форма `went`."),
+        ("Выбери правильную фразу:", ("We had a test two days ago.", "We have a test two days ago.", "We had a test two days before."), 0, "С `two days ago` нужен Past Simple: `had`."),
+        ("Выбери правильный вопрос:", ("Did you finish the project?", "Did you finished the project?", "Do you finish the project yesterday?"), 0, "После `did` глагол идет в базовой форме."),
+        ("Выбери правильную фразу:", ("He didn't see the message.", "He didn't saw the message.", "He doesn't see the message yesterday."), 0, "После `didn't` нужен базовый глагол `see`."),
+        ("Выбери правильную фразу:", ("I met my friend after class.", "I meet my friend after class yesterday.", "I meted my friend after class."), 0, "Прошедшее время от `meet` — `met`."),
+        ("Выбери правильную фразу:", ("They stayed home because it rained.", "They stay home because it rained.", "They stayed home because it rain."), 0, "В прошедшем времени здесь `stayed` и `rained`."),
+        ("Выбери правильную фразу:", ("She bought a new notebook last week.", "She buyed a new notebook last week.", "She buys a new notebook last week."), 0, "У `buy` форма Past Simple — `bought`."),
+        ("Выбери правильную фразу:", ("I woke up late and missed the bus.", "I waked up late and missed the bus.", "I wake up late and missed the bus."), 0, "`wake up` в Past Simple — `woke up`."),
+        ("Выбери правильный ответ:", ("Yes, I did.", "Yes, I was.", "Yes, I do."), 0, "На вопрос в Past Simple отвечаем через `did`."),
+        ("Выбери правильную фразу:", ("He wrote the answer quickly.", "He writed the answer quickly.", "He writes the answer quickly yesterday."), 0, "Past Simple от `write` — `wrote`."),
+        ("Выбери правильную фразу:", ("We left school at three.", "We leaved school at three.", "We leave school at three yesterday."), 0, "Past Simple от `leave` — `left`."),
+        ("Выбери правильную фразу:", ("I didn't understand the task at first.", "I didn't understood the task at first.", "I don't understand the task at first."), 0, "После `didn't` — базовый глагол `understand`."),
+        ("Выбери правильную фразу:", ("She told me the truth.", "She telled me the truth.", "She tells me the truth yesterday."), 0, "Past Simple от `tell` — `told`."),
+        ("Выбери правильный вопрос:", ("Where did you go after school?", "Where did you went after school?", "Where do you go after school yesterday?"), 0, "После `did` нужен базовый глагол `go`."),
+        ("Выбери правильную фразу:", ("They came late but still joined us.", "They comed late but still joined us.", "They come late but still joined us yesterday."), 0, "Past Simple от `come` — `came`."),
+        ("Выбери правильную фразу:", ("I made a small mistake in the test.", "I maked a small mistake in the test.", "I make a small mistake in the test yesterday."), 0, "Past Simple от `make` — `made`."),
+        ("Выбери правильную фразу:", ("She didn't bring her book.", "She didn't brought her book.", "She doesn't bring her book yesterday."), 0, "После `didn't` нужен базовый `bring`."),
+        ("Выбери правильную фразу:", ("We spoke about it after class.", "We speaked about it after class.", "We speak about it after class yesterday."), 0, "Past Simple от `speak` — `spoke`."),
+        ("Выбери правильную фразу:", ("I felt better after some rest.", "I feeled better after some rest.", "I feel better after some rest yesterday."), 0, "Past Simple от `feel` — `felt`."),
+    ],
+)
+
+
+STORY_ORDER = _tasks(
+    "story_order",
+    "story_logic",
+    [
+        ("Что звучит логичнее?", ("I got home, ate dinner, and then started homework.", "I started homework, got home, and then ate dinner.", "I ate dinner, got home, and started homework."), 0, "События выстроены в естественном порядке."),
+        ("Какой вариант лучше собирает историю?", ("We missed the bus, so we walked to school.", "We walked to school, so we missed the bus.", "We missed the bus, but we stayed home."), 0, "Причина и следствие стоят на своих местах."),
+        ("Какой вариант звучит логичнее?", ("She revised for the test, so she felt calmer later.", "She felt calmer later, so she revised for the test.", "She revised for the test, but she never opened her notes."), 0, "Сначала действие, потом результат."),
+        ("Какой вариант лучше?", ("I forgot my charger, so my phone died by the evening.", "My phone died by the evening, so I forgot my charger.", "I forgot my charger, but my phone was fully charged forever."), 0, "Первый вариант строит нормальную причинно-следственную связь."),
+        ("Что звучит как цельная история?", ("He overslept, rushed out, and got to class late.", "He got to class late, rushed out, and overslept.", "He rushed out and got to class late before he overslept."), 0, "События идут в естественном порядке."),
+        ("Какой вариант логичнее?", ("I didn't understand the task at first, but the example helped.", "The example helped, but I didn't understand the task at first after that.", "I understood the task first, but then the example helped me understand it."), 0, "Сначала сложность, потом помощь."),
+        ("Что звучит лучше?", ("We planned to meet, but the rain ruined it.", "The rain ruined it, but we planned to meet after that.", "We planned to meet, so the rain started."), 0, "Здесь естественное столкновение плана и реальности."),
+        ("Какой вариант точнее?", ("She lost her notes, so she had to borrow mine.", "She borrowed mine, so she lost her notes.", "She lost her notes, and I borrowed hers."), 0, "Нормальная логика: потеряла свои — взяла чужие."),
+        ("Что звучит как нормальный мини-рассказ?", ("I came in tired, took a shower, and finally felt human again.", "I felt human again, took a shower, and came in tired.", "I came in tired and felt human again before the shower."), 0, "Порядок действий делает фразу живой и понятной."),
+        ("Какой вариант логичнее?", ("He saw the message too late, so he missed the meeting point.", "He missed the meeting point, so he saw the message too late.", "He saw the message too late, but arrived early."), 0, "Сначала причина, потом последствие."),
+        ("Что звучит лучше?", ("I finished the first part, then checked my answer, and only then sent it.", "I sent it, checked it, and finished the first part.", "I checked my answer after I sent it before finishing it."), 0, "События выстроены последовательно."),
+        ("Какой вариант точнее?", ("She got nervous during the test, but calmed down after the easy question.", "She calmed down after the easy question, but then got nervous before it.", "She got nervous and calm at the same time."), 0, "Есть естественная смена состояния."),
+        ("Что звучит как связная история?", ("We started late, lost some time, and had to cut the last part.", "We cut the last part, lost some time, and started late.", "We started late, so we had extra time."), 0, "Первый вариант последовательно показывает развитие ситуации."),
+        ("Какой вариант логичнее?", ("I checked the bus app, saw the delay, and took a different route.", "I took a different route, checked the bus app, and saw the delay.", "I saw the delay and waited for hours happily."), 0, "Действия выстроены в нормальной последовательности."),
+        ("Что звучит лучше?", ("He promised to help, but then completely forgot about it.", "He forgot about it, but then promised to help before that.", "He promised to help, so he forgot about it."), 0, "Нормальная логика: обещание, потом забывчивость."),
+        ("Какой вариант точнее?", ("I reread the sentence, noticed the trap, and changed my answer in time.", "I changed my answer in time, noticed the trap, and reread the sentence.", "I noticed the trap after I finished the test and changed nothing."), 0, "Логика действий важна: сначала перечитал, потом заметил, потом исправил."),
+        ("Что звучит связно?", ("She prepared well, but the first question still caught her off guard.", "The first question caught her off guard, but she prepared well after that.", "She prepared well, so nothing surprised her at all."), 0, "Есть контраст между подготовкой и неожиданностью."),
+        ("Какой вариант лучше?", ("We reached the station, realized we were early, and grabbed coffee.", "We grabbed coffee, reached the station, and realized we were early.", "We realized we were early before getting there."), 0, "Сначала пришли, потом поняли, потом заполнили паузу."),
+        ("Что звучит логичнее?", ("I didn't reply at once because I wanted to think it through.", "I replied at once because I wanted to think it through.", "I didn't reply at once, so I answered immediately."), 0, "Причина хорошо объясняет задержку."),
+        ("Какой вариант лучше собирает мысль?", ("He tried to explain it simply, and that finally made it click for me.", "It clicked for me, and then he tried to explain it simply.", "He explained it simply, but nothing changed and it clicked."), 0, "Сначала объяснение, потом результат."),
+    ],
+)
+
+
+FUTURE_PLANS = _tasks(
+    "future_plans",
+    "future_plans",
+    [
+        ("Выбери правильную фразу:", ("I'm going to revise tonight.", "I going to revise tonight.", "I'm go to revise tonight."), 0, "Конструкция плана: `am/is/are going to`."),
+        ("Выбери правильную фразу:", ("She's going to stay home this weekend.", "She's going stay home this weekend.", "She going to stay home this weekend."), 0, "С `she` нужен `is going to`."),
+        ("Выбери правильный вопрос:", ("Are you going to join us later?", "Do you going to join us later?", "Are you going join us later?"), 0, "Вопрос строится через `am/is/are`."),
+        ("Выбери правильную фразу:", ("We aren't going to leave early.", "We don't going to leave early.", "We aren't going leave early."), 0, "Отрицание строится через `aren't going to`."),
+        ("Выбери правильную фразу:", ("He's going to call me after class.", "He is going call me after class.", "He going to calls me after class."), 0, "После `going to` идет базовый глагол `call`."),
+        ("Что звучит естественнее?", ("I'm going to take a break first and then study.", "I'm going to taking a break first and then study.", "I going to take a break first and then study."), 0, "После `going to` глагол остается в базовой форме."),
+        ("Выбери правильную фразу:", ("They're going to meet near the station.", "They are going meet near the station.", "They're going to met near the station."), 0, "После `going to` — базовый `meet`."),
+        ("Выбери правильный вопрос:", ("What are you going to do tomorrow?", "What do you going to do tomorrow?", "What are you going do tomorrow?"), 0, "Вопрос про планы строится через `are ... going to`."),
+        ("Выбери правильную фразу:", ("I'm not going to panic this time.", "I don't going to panic this time.", "I'm not going panic this time."), 0, "Правильное отрицание: `am not going to`."),
+        ("Выбери правильную фразу:", ("She's going to start earlier next time.", "She's going to starts earlier next time.", "She going to start earlier next time."), 0, "После `going to` — базовый `start`."),
+        ("Что звучит лучше?", ("We're going to finish this after dinner.", "We're going finishing this after dinner.", "We going to finish this after dinner."), 0, "План оформляется через `are going to finish`."),
+        ("Выбери правильную фразу:", ("He's not going to skip the lesson.", "He isn't going skip the lesson.", "He doesn't going to skip the lesson."), 0, "После `isn't going to` нужен базовый глагол."),
+        ("Выбери правильный ответ:", ("Yes, I am.", "Yes, I do.", "Yes, I going."), 0, "На вопрос с `Are you going to ...?` отвечаем через `am`."),
+        ("Что звучит естественнее?", ("I'm going to text you when I get home.", "I'm going to texting you when I get home.", "I going to text you when I get home."), 0, "Здесь нужен `going to text`."),
+        ("Выбери правильную фразу:", ("They're going to work on it together.", "They going to work on it together.", "They're going to works on it together."), 0, "После `going to` — базовый `work`."),
+        ("Выбери правильный вопрос:", ("Is she going to talk to the teacher?", "Does she going to talk to the teacher?", "Is she going talk to the teacher?"), 0, "Вопрос строится через `is she going to`."),
+        ("Выбери правильную фразу:", ("We're going to leave as soon as he arrives.", "We're going to left as soon as he arrives.", "We going to leave as soon as he arrives."), 0, "После `going to` нужен базовый `leave`."),
+        ("Что звучит лучше?", ("I'm going to try a different way next time.", "I'm going to trying a different way next time.", "I am go to try a different way next time."), 0, "Здесь нужен `going to try`."),
+        ("Выбери правильную фразу:", ("She's going to explain it later.", "She's going explain it later.", "She going to explains it later."), 0, "После `going to` — `explain` без `-s`."),
+        ("Выбери правильную фразу:", ("They're not going to change the plan now.", "They don't going to change the plan now.", "They're not going change the plan now."), 0, "Правильная форма отрицания — `are not going to`."),
+    ],
+)
+
+
+CHOICE_MOVE = _tasks(
+    "choice_move",
+    "dialogue_choice",
+    [
+        ("Friend: `Do you want to come with us later?`", ("I'd like to, but I'm going to stay home tonight.", "I'd like, but I going to stay home tonight.", "I go stay home tonight."), 0, "Естественный отказ с вежливым тоном и причиной."),
+        ("Classmate: `Can we move it to tomorrow?`", ("Yeah, that's probably better for me.", "Yeah, that probably better for me.", "Tomorrow move better."), 0, "Короткий естественный ответ для переноса плана."),
+        ("Friend: `What are you doing this weekend?`", ("I'm going to catch up on homework and rest a bit.", "I'm going catch up on homework and rest a bit.", "Catch up homework and rest."), 0, "Ответ про планы собирается через `going to`."),
+        ("Classmate: `Do you mind if I join you?`", ("Not at all. You're welcome to come.", "Not at all. You welcome to come.", "No mind come."), 0, "Хорошая вежливая реакция."),
+        ("Friend: `Can you help me after class?`", ("I can, but only for a few minutes.", "I can, but only few minutes.", "Can, few minutes only."), 0, "Такой ответ короткий, живой и естественный."),
+        ("Teacher: `Are you going to finish it today?`", ("I think so, if nothing gets in the way.", "I think so, if nothing get in the way.", "I think yes if nothing in way."), 0, "С `nothing` нужен `gets`, и весь ответ звучит уверенно."),
+        ("Friend: `Why don't we just start earlier next time?`", ("Yeah, that would probably save us some stress.", "Yeah, that would probably saves us some stress.", "Yes save stress."), 0, "После `would` нужен базовый глагол."),
+        ("Classmate: `So what's the plan now?`", ("We're going to split the work and compare answers later.", "We're going split the work and compare answers later.", "We split work later answers."), 0, "План звучит ясно и по-человечески."),
+        ("Friend: `Can we skip this part?`", ("I'd rather not. It still looks important.", "I'd rather not. It still look important.", "Rather not, important still."), 0, "С `it` нужен `looks`, и ответ звучит мягко."),
+        ("Classmate: `Do you want me to explain it again?`", ("Yeah, but maybe a bit more simply this time.", "Yeah, but maybe a bit more simple this time.", "Yeah explain simple this time."), 0, "Естественная просьба переформулировать объяснение."),
+        ("Friend: `Are you free after school?`", ("Not really. I'm going to revise for the test.", "Not really. I going to revise for the test.", "Not really revise test."), 0, "План оформлен через `going to revise`."),
+        ("Teacher: `Can you present first?`", ("I'd rather go second, if that's okay.", "I'd rather goes second, if that's okay.", "Rather second okay."), 0, "После `would rather` нужен базовый глагол `go`."),
+        ("Friend: `What if the plan doesn't work?`", ("Then we'll figure something else out.", "Then we'll figures something else out.", "Then something else out."), 0, "После `will` нужен базовый глагол `figure`."),
+        ("Classmate: `Do you want to work alone or together?`", ("Together is fine, as long as we stay focused.", "Together are fine, as long as we stay focused.", "Together fine stay focused."), 0, "Первый вариант звучит естественно и собранно."),
+        ("Friend: `Can you send me your notes later?`", ("Sure, I'm going to do it when I get home.", "Sure, I'm going do it when I get home.", "Sure do when home."), 0, "План в будущем оформлен правильно и звучит живо."),
+        ("Teacher: `Are you ready to answer now?`", ("Almost. I just need a few more seconds.", "Almost. I just need few more seconds.", "Almost need seconds."), 0, "Первый вариант естественно тянет паузу."),
+        ("Friend: `Do you want to leave now or wait?`", ("Let's wait a bit longer and see.", "Let's waits a bit longer and see.", "Wait bit longer see."), 0, "После `let's` нужен базовый глагол `wait`."),
+        ("Classmate: `Why don't you ask the teacher directly?`", ("Yeah, I probably will if I'm still confused.", "Yeah, I probably will if I still confused.", "Probably will if confused."), 0, "Нормальный ответ с условием и живой логикой."),
+        ("Friend: `Are you going to join the extra class?`", ("I think I am. It sounds useful.", "I think I am. It sound useful.", "I think am useful."), 0, "С `it` нужен `sounds`, и весь ответ звучит по-человечески."),
+        ("Classmate: `Can you explain what happened?`", ("Yeah. The plan changed at the last minute.", "Yeah. The plan change at the last minute.", "Yeah plan changed last minute."), 0, "Past Simple `changed` нужен для завершенного события."),
+    ],
+)
+
+
+EVENT_READING = _tasks(
+    "event_reading",
+    "reading_events",
+    [
+        ("Текст: `Yesterday I planned to revise after school, but I got home late and felt too tired to focus.` Что помешало плану?", ("The task was too easy.", "The person came home late and was tired.", "The teacher cancelled everything."), 1, "Причина прямо названа: поздно пришел и устал."),
+        ("Текст: `We were going to meet at six, but then Kate texted that she was still on the bus.` Что произошло?", ("They started early.", "The meeting was probably delayed.", "Kate forgot her phone."), 1, "Если она еще в автобусе, встречу, скорее всего, пришлось сдвинуть."),
+        ("Текст: `I thought the test would be awful, but the first two questions were actually manageable.` Как изменилось отношение автора?", ("It got less stressful after the start.", "It got worse immediately.", "Nothing changed."), 0, "После начала тест уже казался не таким страшным."),
+        ("Текст: `Max revised vocabulary on Friday, so by Saturday he felt much calmer about the quiz.` Что помогло Максу?", ("Sleeping longer.", "Revising vocabulary earlier.", "Skipping the quiz."), 1, "Спокойствие стало результатом подготовки."),
+        ("Текст: `We missed the first bus, walked to the next stop, and still made it in time.` Какой вывод верный?", ("They gave up and went home.", "They still arrived on time.", "They waited for hours."), 1, "Фраза `still made it in time` говорит о том, что они успели."),
+        ("Текст: `I didn't answer right away because I wanted to think through the wording first.` Почему ответ задержался?", ("The person had no idea at all.", "The person wanted a clearer formulation.", "The phone battery died."), 1, "Причина прямо названа: нужно было продумать формулировку."),
+        ("Текст: `At first the story looked simple, but the final line changed the whole meaning.` В чем была сложность?", ("Too many unknown words.", "The main idea shifted at the end.", "The text was too short."), 1, "Ключ — в последней строке, а не в лексике."),
+        ("Текст: `Lena was going to skip the extra lesson, but then she found out it was about the topic she still didn't get.` Почему она передумала?", ("Her friend forced her.", "The topic was still important for her.", "She had nothing else to do."), 1, "Она осталась, потому что тема была ей нужна."),
+        ("Текст: `I wrote the answer fast, reread it, and immediately saw why it sounded off.` Что случилось после перечитывания?", ("The answer seemed perfect.", "The person noticed the problem.", "The person deleted everything."), 1, "После перечитывания ошибка стала заметна."),
+        ("Текст: `We were going to leave early, but the teacher kept us for ten extra minutes.` Как это повлияло на план?", ("They probably left later than planned.", "They still left earlier than usual.", "They cancelled the lesson."), 0, "Если их задержали, значит план по раннему уходу сдвинулся."),
+        ("Текст: `I knew most of the words, but I still couldn't tell what the writer was really trying to say.` Что было настоящей проблемой?", ("Vocabulary was too advanced.", "The deeper meaning was unclear.", "The text had no structure."), 1, "Слова были понятны, проблема была в общем смысле."),
+        ("Текст: `He promised to send the file that night, but I only got it the next afternoon.` Что можно понять?", ("He sent it exactly on time.", "There was a delay.", "The file was lost forever."), 1, "Раз файл пришел только днем позже, обещание не было выполнено вовремя."),
+        ("Текст: `I wasn't going to say anything, but the mistake was so obvious that I had to point it out.` Почему человек заговорил?", ("Because the mistake was too clear to ignore.", "Because someone asked directly.", "Because the teacher got angry."), 0, "Причина прямо названа в тексте."),
+        ("Текст: `The plan sounded good in theory, but once we started, it became obvious that it was too ambitious.` Какой вывод лучше?", ("The plan was realistic.", "The plan looked better than it worked.", "The plan was too easy."), 1, "Контраст между теорией и практикой здесь ключевой."),
+        ("Текст: `I revised less this week, so I already know the final check will feel rougher.` Что ожидает автор?", ("The final check will be easier.", "The final check may feel harder.", "The final check was cancelled."), 1, "Он сам связывает слабую подготовку с более трудным финалом."),
+        ("Текст: `We changed the order of tasks, and suddenly the whole thing started making sense.` Что помогло?", ("Doing less work.", "Changing the sequence.", "Taking a long break."), 1, "Изменение порядка задач дало ясность."),
+        ("Текст: `I didn't need a new explanation. I just needed a better example.` Что было нужно человеку?", ("More theory.", "A clearer example.", "An easier teacher."), 1, "В тексте это сказано буквально."),
+        ("Текст: `She looked confident, but later admitted she had been guessing on half the questions.` Что можно понять?", ("Her confidence was partly fake.", "She knew everything perfectly.", "She didn't do the test."), 0, "Внешняя уверенность не совпала с реальной ситуацией."),
+        ("Текст: `I was going to stop after one attempt, but then I saw what exactly went wrong, so I tried again.` Почему человек сделал вторую попытку?", ("Because someone forced him.", "Because the mistake became clear.", "Because the first try was perfect."), 1, "Осознание ошибки дало мотивацию попробовать снова."),
+        ("Текст: `The answer was technically okay, but it still didn't sound like something I would naturally say.` Что здесь проверяется?", ("Only grammar.", "Naturalness as well as correctness.", "Only spelling."), 1, "Идея в различии между формальной правильностью и естественностью."),
+    ],
+)
+
+
+PRECISE_REPLY = _tasks(
+    "precise_reply",
+    "precise_reply",
+    [
+        ("Что звучит точнее?", ("I was tired, so I couldn't focus properly.", "I was tired.", "Tired, no focus."), 0, "Первый вариант точнее связывает причину и эффект."),
+        ("Что звучит сильнее?", ("I went there because I thought it would actually help.", "I went there.", "I went because help."), 0, "Первый вариант дает причину и звучит как нормальный ответ."),
+        ("Что звучит лучше?", ("I'm going to leave early because I still need time to revise.", "I'm going to leave early.", "Leave early revise."), 0, "План плюс причина дают более сильный ответ."),
+        ("Что звучит точнее?", ("It wasn't hard exactly, just more confusing than I expected.", "It was hard.", "Not hard confusing."), 0, "Первый вариант точнее описывает оттенок проблемы."),
+        ("Что звучит лучше?", ("The first part was fine, but the last question threw me off.", "The last question was difficult.", "Last question difficult."), 0, "Первый вариант показывает контраст внутри задания."),
+        ("Что звучит сильнее?", ("I understood the rule, but I still used the wrong form under pressure.", "I knew the rule but was wrong.", "Rule knew wrong form."), 0, "Ответ становится точнее и ближе к реальной ситуации."),
+        ("Что звучит точнее?", ("I'm not going to skip it, but I may do it later than planned.", "I'm not going to skip it.", "Not skip maybe later."), 0, "Появляется точный нюанс, а не только общий факт."),
+        ("Что звучит лучше?", ("It sounded natural to me at first, but then I noticed the wording issue.", "It sounded natural at first.", "Natural at first issue later."), 0, "Первый вариант дает развитие мысли."),
+        ("Что звучит сильнее?", ("I didn't answer quickly because I wanted the phrasing to be cleaner.", "I didn't answer quickly.", "Didn't answer quickly phrasing."), 0, "Здесь важна объясненная причина задержки."),
+        ("Что звучит точнее?", ("The story wasn't difficult to read, but the last line changed everything.", "The last line changed everything.", "Story easy line changed."), 0, "Контраст делает ответ сильнее."),
+        ("Что звучит лучше?", ("I'm going to try again because now I can see the mistake more clearly.", "I'm going to try again.", "Try again now mistake."), 0, "Появляется осмысленная мотивация."),
+        ("Что звучит сильнее?", ("I don't mind grammar practice, but I need it to feel more connected to real speech.", "I don't mind grammar practice.", "Grammar okay real speech."), 0, "Первый вариант точнее выражает позицию."),
+        ("Что звучит точнее?", ("At first I thought it was obvious, but then the logic trap hit me.", "At first it was obvious.", "Obvious then trap."), 0, "Первый вариант передает смену восприятия."),
+        ("Что звучит лучше?", ("I was going to relax, but then I remembered I still had one task left.", "I was going to relax.", "Going to relax task left."), 0, "Ответ становится более живым и логичным."),
+        ("Что звучит сильнее?", ("The answer looked okay on the surface, but it still felt a bit off.", "The answer looked okay.", "Answer okay but off."), 0, "Появляется важный нюанс про ощущение языка."),
+        ("Что звучит точнее?", ("I usually learn faster when I see the same structure in different examples.", "I learn faster with examples.", "Examples faster learn."), 0, "Первый вариант точнее и сильнее."),
+        ("Что звучит лучше?", ("I don't just want to pass the check — I want to feel in control.", "I want to pass the check.", "Pass check control."), 0, "Первый вариант звучит взрослее и глубже."),
+        ("Что звучит сильнее?", ("The task got easier once I stopped translating every word in my head.", "The task got easier.", "Task easier translation stop."), 0, "Первый вариант показывает, за счет чего стало легче."),
+        ("Что звучит точнее?", ("I'm going to fix the weak spots first and then come back to the hard part.", "I'm going to fix it.", "Fix weak spots hard part later."), 0, "План становится ясным и управляемым."),
+        ("Что звучит лучше?", ("The real problem wasn't grammar itself — it was choosing under time pressure.", "The problem was grammar.", "Problem time pressure grammar."), 0, "Первый вариант точнее описывает реальную проблему."),
+    ],
+)
+
+
+WRITING_PAST_FUTURE = _tasks(
+    "writing_past_future",
+    "writing_build",
+    [
+        ("Какое начало лучше для ответа `What did you do last weekend?`", ("Last weekend I mostly stayed home and caught up on sleep.", "Last weekend stayed home and sleep.", "Weekend home sleep."), 0, "Первый вариант звучит как нормальное начало короткого ответа."),
+        ("Какой вариант лучше для темы `A day that went wrong`?", ("One day I missed the bus, got stressed, and arrived late.", "One day missed bus stressed arrived late.", "Day wrong bus."), 0, "Первый вариант собран и звучит как мини-история."),
+        ("Какой вариант лучше для темы `Plans for tomorrow`?", ("Tomorrow I'm going to finish my homework earlier than usual.", "Tomorrow going to finish homework earlier.", "Tomorrow finish homework earlier."), 0, "План оформлен через `going to` и звучит естественно."),
+        ("Какой вариант лучше для темы `What changed recently`?", ("Recently I started checking my answers more carefully before sending them.", "Recently I started check answers before sending.", "Recently answers careful."), 0, "Первый вариант — нормальная письменная фраза."),
+        ("Какой вариант лучше для темы `What you learned from a mistake`?", ("That mistake showed me that I rush too much under pressure.", "That mistake showed me I rush too much.", "Mistake showed rush."), 0, "Первый вариант звучит сильнее и яснее."),
+        ("Какой вариант лучше для темы `A useful lesson last week`?", ("Last week we had a lesson that finally made the topic click for me.", "Last week had lesson topic click.", "Week lesson click topic."), 0, "Первый вариант — хороший короткий writing-ответ."),
+        ("Какой вариант лучше для темы `Your plans for the weekend`?", ("This weekend I'm going to rest, revise, and maybe meet a friend.", "This weekend going to rest revise maybe meet friend.", "Weekend rest revise friend."), 0, "Первый вариант грамотно строит план."),
+        ("Какой вариант лучше для темы `Why a task felt hard`?", ("It felt hard because I understood the words but not the logic.", "It felt hard because understood words not logic.", "Hard because words logic."), 0, "Пояснение делает ответ содержательным."),
+        ("Какой вариант лучше для темы `What happened after school yesterday`?", ("Yesterday after school I went home, ate, and then revised.", "Yesterday after school went home ate revised.", "After school yesterday home ate."), 0, "Первый вариант связный и естественный."),
+        ("Какой вариант лучше для темы `What you are going to improve next`?", ("Next I'm going to work on making my answers sound less stiff.", "Next going to work on answers less stiff.", "Next less stiff answers."), 0, "План звучит естественно и конкретно."),
+        ("Какой вариант лучше для темы `A moment you felt better`?", ("I felt better once I saw that the task was actually manageable.", "I felt better once saw task manageable.", "Felt better task manageable."), 0, "Первый вариант звучит как нормальная письменная мысль."),
+        ("Какой вариант лучше для темы `A plan that changed`?", ("We were going to meet outside, but then it started raining.", "We were going meet outside but raining.", "Plan changed raining."), 0, "Контраст плана и реальности делает ответ живым."),
+        ("Какой вариант лучше для темы `What you want to do differently now`?", ("Now I want to slow down a bit and think through the wording.", "Now I want slow down and think wording.", "Now slow wording."), 0, "Первый вариант звучит естественно и по-взрослому."),
+        ("Какой вариант лучше для темы `Why the final check matters`?", ("The final check matters because it shows what I can do without help.", "Final check matters because shows what I can do.", "Final check shows help."), 0, "Первый вариант сильнее и яснее."),
+        ("Какой вариант лучше для темы `A useful habit`?", ("One useful habit is rereading my answer before I send it.", "One useful habit rereading answer before send.", "Useful habit rereading."), 0, "Первый вариант — хороший короткий writing-ответ."),
+        ("Какой вариант лучше для темы `A past success`?", ("I felt good when I finally noticed the trap before it was too late.", "I felt good when finally noticed trap.", "Felt good trap noticed."), 0, "Первый вариант лучше собирает мысль."),
+        ("Какой вариант лучше для темы `Your next step in English`?", ("My next step is to make my speaking feel quicker and more natural.", "My next step make speaking quicker and more natural.", "Next step speaking quicker."), 0, "Первый вариант звучит естественно и содержательно."),
+        ("Какой вариант лучше для темы `A difficult moment in class`?", ("I had a difficult moment when I knew the rule but still froze.", "I had difficult moment knew rule froze.", "Difficult class froze."), 0, "Первый вариант сильнее и точнее."),
+        ("Какой вариант лучше для темы `A plan you want to keep`?", ("I'm going to keep studying in short daily blocks instead of random long sessions.", "I'm going keep studying in short daily blocks.", "Going keep short blocks."), 0, "После `going to` нужен базовый глагол `keep`."),
+        ("Какой вариант лучше как финальная мысль?", ("That's why I want my answers to feel clearer, not just technically correct.", "That's why I want answers feel clearer.", "Answers clearer correct."), 0, "Первый вариант хорошо завершает короткий письменный ответ."),
+    ],
+)
+
+
+TENSE_PRESSURE = _tasks(
+    "tense_pressure",
+    "tense_switch",
+    [
+        ("Выбери правильную фразу:", ("I usually study in the evening, but yesterday I studied in the morning.", "I usually studied in the evening, but yesterday I study in the morning.", "I usually study in the evening, but yesterday I study in the morning."), 0, "Настоящая привычка и одно событие в прошлом требуют разных времен."),
+        ("Выбери правильную фразу:", ("We're going to leave soon because we finished everything already.", "We're going to leave soon because we finish everything already.", "We go to leave soon because we finished everything already."), 0, "План в будущем + завершенное действие в прошлом/уже сейчас."),
+        ("Выбери правильную фразу:", ("She missed the bus yesterday, so today she's going to leave earlier.", "She misses the bus yesterday, so today she's going to leave earlier.", "She missed the bus yesterday, so today she going to leave earlier."), 0, "Вчерашнее событие — Past Simple, план на сегодня — `going to`."),
+        ("Выбери правильную фразу:", ("I usually don't panic, but that question really threw me off.", "I usually didn't panic, but that question really throw me off.", "I usually don't panic, but that question really throwed me off."), 0, "Привычка — Present Simple, единичный сбой — Past Simple."),
+        ("Выбери правильную фразу:", ("They're going to check the answer again because they aren't sure yet.", "They go to check the answer again because they aren't sure yet.", "They're going to checked the answer again because they aren't sure yet."), 0, "План в будущем: `are going to check`."),
+        ("Выбери правильную фразу:", ("He usually comes late, but last time he arrived early.", "He usually came late, but last time he arrives early.", "He usually comes late, but last time he arrive early."), 0, "Привычка — `comes`, разовый случай в прошлом — `arrived`."),
+        ("Выбери правильную фразу:", ("We talked about the task yesterday, and now we're going to rewrite it.", "We talk about the task yesterday, and now we're going to rewrite it.", "We talked about the task yesterday, and now we going to rewrite it."), 0, "Прошлое действие и текущий план."),
+        ("Выбери правильную фразу:", ("I didn't get it at first, but now it makes sense.", "I don't get it at first, but now it made sense.", "I didn't got it at first, but now it makes sense."), 0, "Прошлое затруднение и настоящее понимание."),
+        ("Выбери правильную фразу:", ("She usually checks everything twice, so she isn't going to rush this time.", "She usually check everything twice, so she isn't going to rush this time.", "She usually checks everything twice, so she doesn't going to rush this time."), 0, "Привычка в настоящем и план на этот раз."),
+        ("Выбери правильную фразу:", ("We were tired yesterday, so today we're going to keep it short.", "We are tired yesterday, so today we're going to keep it short.", "We were tired yesterday, so today we going to keep it short."), 0, "Вчерашнее состояние — Past Simple, план на сегодня — `going to`."),
+        ("Выбери правильную фразу:", ("He usually answers fast, but yesterday he needed more time.", "He usually answer fast, but yesterday he needed more time.", "He usually answers fast, but yesterday he need more time."), 0, "Привычка — `answers`, прошлое событие — `needed`."),
+        ("Выбери правильную фразу:", ("I'm going to ask again because I still don't fully get the point.", "I'm going to ask again because I still didn't fully get the point.", "I going to ask again because I still don't fully get the point."), 0, "Текущее состояние непонимания — Present Simple, а план — `going to ask`."),
+        ("Выбери правильную фразу:", ("Last week I felt lost, but now I'm starting to feel more confident.", "Last week I feel lost, but now I'm starting to felt more confident.", "Last week I felt lost, but now I starting to feel more confident."), 0, "Прошлое — `felt`, текущее развитие — `am starting to feel`."),
+        ("Выбери правильную фразу:", ("We usually finish on time, but today we're going to stay longer.", "We usually finished on time, but today we're going to stay longer.", "We usually finish on time, but today we going to stay longer."), 0, "Привычка и план на сегодня."),
+        ("Выбери правильную фразу:", ("She didn't answer right away because she wanted to think first.", "She doesn't answer right away because she wanted to think first.", "She didn't answered right away because she wanted to think first."), 0, "Прошедшее действие требует `didn't answer`."),
+        ("Выбери правильную фразу:", ("I usually reread my answers, and tomorrow I'm going to do the same.", "I usually reread my answers, and tomorrow I do the same.", "I usually reread my answers, and tomorrow I'm going to did the same."), 0, "Привычка в настоящем и план на завтра."),
+        ("Выбери правильную фразу:", ("They planned everything yesterday, so today they're going to move faster.", "They plan everything yesterday, so today they're going to move faster.", "They planned everything yesterday, so today they going to move faster."), 0, "Прошлое планирование и текущий план действий."),
+        ("Выбери правильную фразу:", ("He didn't notice the trap before, but now he usually spots it quickly.", "He didn't noticed the trap before, but now he usually spots it quickly.", "He didn't notice the trap before, but now he usually spot it quickly."), 0, "После `didn't` — базовый `notice`, а привычка сейчас — `spots`."),
+        ("Выбери правильную фразу:", ("I was nervous at first, but now I'm going to trust my first clear answer.", "I am nervous at first, but now I'm going to trust my first clear answer.", "I was nervous at first, but now I going to trust my first clear answer."), 0, "Прошлое состояние и текущий план."),
+        ("Выбери правильную фразу:", ("We usually start earlier, but this time we're going to wait for everyone.", "We usually started earlier, but this time we're going to wait for everyone.", "We usually start earlier, but this time we going to wait for everyone."), 0, "Привычка в настоящем и особый план на этот раз."),
+    ],
+)
+
+
+CHECK2_A2 = _tasks(
+    "check2_a2",
+    "checkpoint",
+    [
+        ("Выбери правильную фразу:", ("I missed the bus yesterday, so today I'm going to leave earlier.", "I miss the bus yesterday, so today I'm going to leave earlier.", "I missed the bus yesterday, so today I going to leave earlier."), 0, "Прошлое событие и план на сегодня требуют разных форм."),
+        ("Что ближе по смыслу к `The wording threw me off`?", ("Формулировка сбила меня.", "Формулировка меня вдохновила.", "Формулировка была слишком короткой."), 0, "Здесь речь о том, что подача ответа запутала."),
+        ("Выбери лучший вопрос:", ("Why did the answer sound okay but still feel unnatural?", "Why did the answer sounded okay but still feel unnatural?", "Why does the answer sound okay but still felt unnatural?"), 0, "После `did` — базовый `sound`."),
+        ("Что звучит естественнее?", ("I was going to relax, but then I remembered the unfinished task.", "I was going to relax, but then I remember the unfinished task.", "I was going to relaxing, but then I remembered the unfinished task."), 0, "План в прошлом + воспоминание о задаче."),
+        ("Текст: `We were going to start at six, but one person arrived twenty minutes late.` Что произошло?", ("They probably started later than planned.", "They started early.", "Nobody arrived."), 0, "Опоздание явно сдвинуло план."),
+        ("Что звучит точнее?", ("I didn't fail because I didn't know the rule — I failed because I rushed.", "I failed because I didn't know the rule.", "I failed because rush."), 0, "Первый вариант точнее объясняет реальную причину ошибки."),
+        ("Выбери правильную фразу:", ("She usually checks the logic, but this time she trusted the first option.", "She usually check the logic, but this time she trusted the first option.", "She usually checks the logic, but this time she trust the first option."), 0, "Привычка — Present Simple, разовый выбор — Past Simple."),
+        ("Что лучше передает смысл `I need a clearer structure, not easier prompts`?", ("Мне нужна более понятная структура, а не более лёгкие задания.", "Мне нужны только простые задания.", "Мне не нужна никакая структура."), 0, "Ключ — в ясности структуры, а не в снижении сложности."),
+        ("Выбери правильную фразу:", ("They're going to compare answers after they finish the first part.", "They going to compare answers after they finish the first part.", "They're going to compared answers after they finish the first part."), 0, "После `going to` нужен базовый глагол."),
+        ("Текст: `I knew the words, but I still couldn't tell what the writer was really getting at.` В чем была проблема?", ("Смысл текста оставался неясным.", "Слова были слишком сложными.", "Текст был слишком длинным."), 0, "Слова понятны, а вот реальный смысл — нет."),
+        ("Что звучит сильнее?", ("The answer wasn't wrong exactly, just too stiff for the situation.", "The answer was wrong.", "Answer stiff wrong."), 0, "Первый вариант различает ошибку и неестественность."),
+        ("Выбери правильный вопрос:", ("Are you going to rewrite it or leave it like this?", "Do you going to rewrite it or leave it like this?", "Are you going rewrite it or leave it like this?"), 0, "Вопрос про планы — через `are ... going to`."),
+        ("Что звучит лучше?", ("Last week I froze in speaking tasks, but now I recover faster.", "Last week I freeze in speaking tasks, but now I recover faster.", "Last week I froze in speaking tasks, but now I recovered faster."), 0, "Прошлое сравнивается с текущим состоянием."),
+        ("Что лучше как мини-вывод?", ("The shorter version works because the logic is cleaner.", "The shorter version work because the logic is cleaner.", "Shorter version cleaner logic."), 0, "С `version` нужен `works`, и ответ звучит цельно."),
+        ("Текст: `I wasn't going to ask for help, but the example made the whole thing click.` Почему человек всё-таки сдвинулся вперед?", ("Потому что хороший пример прояснил идею.", "Потому что задание стало легче само по себе.", "Потому что он решил всё пропустить."), 0, "Именно пример дал понимание."),
+        ("Выбери правильную фразу:", ("He didn't notice the trap at first, but later he saw exactly what was off.", "He didn't noticed the trap at first, but later he saw exactly what was off.", "He doesn't notice the trap at first, but later he saw exactly what was off."), 0, "После `didn't` нужен базовый `notice`."),
+        ("Что звучит естественнее?", ("I'm going to keep my answer simple, but I want it to sound real.", "I'm going to keep my answer simple, but I want it sound real.", "I going to keep answer simple but real."), 0, "После `want` нужен инфинитив `to sound`."),
+        ("Что точнее описывает `The task looked easy, but the trap was in the logic`?", ("Подвох был не в словах, а в самой логике.", "Задача была лёгкой во всём.", "Проблема была только в грамматике."), 0, "Суть именно в логической ловушке."),
+        ("Выбери лучший ответ учителю:", ("I think the idea is clear, but the phrasing still needs work.", "I think the idea are clear, but the phrasing still needs work.", "Idea clear phrasing work."), 0, "С `idea` нужен `is`, и первый вариант звучит зрелее."),
+        ("Что лучше как финальная мысль?", ("I'm not aiming for perfect wording every time — I want clear, usable English.", "I'm not aiming for perfect wording every time — I wants clear, usable English.", "Not aiming perfect wording usable English."), 0, "С `I` нужен `want`, и весь ответ звучит как сильный вывод."),
+    ],
+)
+
+
+CHECK2_PLUS = _tasks(
+    "check2_plus",
+    "checkpoint",
+    [
+        ("Выбери лучший вариант:", ("I wasn't going to say anything, but the phrasing was so off that I had to point it out.", "I wasn't going to say anything, but the phrasing was so off that I had point it out.", "I wasn't going to say anything, but the phrasing were so off that I had to point it out."), 0, "После `had to` нужен базовый глагол `point`, а `phrasing` требует `was`."),
+        ("Что ближе по смыслу к `I second-guessed myself and changed the better answer`?", ("Я пересомневался и заменил более сильный ответ.", "Я стал увереннее и улучшил ответ.", "Я оставил всё как было."), 0, "Здесь смысл в том, что сомнение только ухудшило выбор."),
+        ("Выбери правильный вопрос:", ("Why did the safer answer still sound less convincing?", "Why did the safer answer still sounded less convincing?", "Why does the safer answer still sound less convincing yesterday?"), 0, "После `did` нужен базовый `sound`."),
+        ("Что звучит естественнее?", ("I knew the rule in theory, but in the moment I still froze.", "I know the rule in theory, but in the moment I still froze.", "I knew the rule in theory, but in the moment I still freeze."), 0, "Прошлое событие требует Past Simple и для знания, и для сбоя."),
+        ("Текст: `The answer looked polished, but it didn't really match the tone of the situation.` Что было слабым местом?", ("The tone fit perfectly.", "The phrasing didn't fit the context.", "The answer was too short."), 1, "Проблема в несоответствии тону ситуации."),
+        ("Что звучит сильнее?", ("I don't need easier tasks — I need sharper feedback on why my answer feels off.", "I don't need easier tasks.", "Need sharper feedback."), 0, "Первый вариант формулирует реальную потребность точнее."),
+        ("Выбери правильную фразу:", ("She usually spots the grammar trap, but this time the logic trap got her.", "She usually spot the grammar trap, but this time the logic trap got her.", "She usually spots the grammar trap, but this time the logic trap get her."), 0, "Привычка — `spots`, разовый удар ловушки — `got`."),
+        ("Что лучше передает смысл `The shorter answer won because it stayed cleaner under pressure`?", ("Победил более короткий ответ, потому что под давлением он остался чище.", "Победил более длинный ответ, потому что он был сложнее.", "Под давлением победило всё сразу."), 0, "Ключ — в ясности под давлением, а не в длине ради длины."),
+        ("Выбери правильную фразу:", ("They're going to compare the two versions and keep the clearer one.", "They're going to compared the two versions and keep the clearer one.", "They going to compare the two versions and keep the clearer one."), 0, "После `going to` нужны базовые `compare` и `keep`."),
+        ("Текст: `I understood every sentence separately, but I still missed what the whole paragraph was doing.` В чем была проблема?", ("В отдельных словах.", "В общей функции абзаца и его идее.", "В орфографии."), 1, "Проблема уже не в словах, а в роли абзаца целиком."),
+        ("Что звучит точнее?", ("The answer wasn't weak because it was short — it was weak because it was vague.", "The answer was weak because it was short.", "Answer weak because short."), 0, "Первый вариант точнее объясняет причину слабости."),
+        ("Выбери правильный вопрос:", ("Are you going to keep this version or rewrite it from scratch?", "Do you going to keep this version or rewrite it from scratch?", "Are you going keep this version or rewrite it from scratch?"), 0, "Вопрос про план — через `are ... going to`."),
+        ("Что звучит лучше?", ("Last month I would've picked the safer option, but now I trust the cleaner one more.", "Last month I would've pick the safer option, but now I trust the cleaner one more.", "Last month I would picked the safer option, but now I trust the cleaner one more."), 0, "После `would've` нужен базовый `pick`."),
+        ("Что лучше как мини-вывод?", ("A strong answer doesn't just survive grammar — it survives context too.", "A strong answer don't just survive grammar — it survives context too.", "Strong answer survive grammar context."), 0, "С `answer` нужен `doesn't`, и мысль звучит сильнее."),
+        ("Текст: `I wasn't lost because the English was too hard. I was lost because I couldn't see what mattered most.` Что это показывает?", ("Проблема была в приоритете смысла, а не в сложности языка.", "Проблема была только в словаре.", "Проблемы вообще не было."), 0, "Главная мысль — не всё трудное из-за языка, иногда из-за фокуса."),
+        ("Выбери правильную фразу:", ("He didn't change the wording much, but the one change he made fixed the whole tone.", "He didn't changed the wording much, but the one change he made fixed the whole tone.", "He doesn't change the wording much, but the one change he made fixed the whole tone."), 0, "После `didn't` — базовый `change`, а дальше Past Simple `fixed`."),
+        ("Что звучит естественнее?", ("I'm going to keep the answer simple, but I want it to land more clearly.", "I'm going to keep the answer simple, but I want it land more clearly.", "I going to keep answer simple but clear."), 0, "После `want` нужен инфинитив `to land`, даже в разговорном оттенке."),
+        ("Что точнее описывает `The task wasn't hard, but the framing pushed me in the wrong direction`?", ("Сложность была в подаче, которая вела к неверному выбору.", "Задача была легкой и прямой.", "Проблема была только во времени."), 0, "Здесь важна именно опасная формулировка."),
+        ("Выбери лучший ответ учителю:", ("I think the content works, but the delivery still feels slightly off.", "I think the content work, but the delivery still feels slightly off.", "Content works delivery off."), 0, "С `content` здесь нужен `works`, и первый вариант звучит точнее."),
+        ("Что лучше как финальная мысль?", ("At this point I care less about sounding impressive and more about sounding precise.", "At this point I cares less about sounding impressive and more about sounding precise.", "At this point sounding precise more."), 0, "С `I` нужен `care`, и весь ответ звучит как уверенный вывод."),
+    ],
+)
+
+
 MISSION_LEVEL_TASKS: dict[str, dict[str, tuple[Task, ...]]] = {
     "routine_words": {"default": ROUTINE_A2, "plus": ROUTINE_PLUS},
     "present_simple": {"default": GRAMMAR_A2, "plus": GRAMMAR_PLUS},
@@ -585,10 +865,19 @@ MISSION_LEVEL_TASKS: dict[str, dict[str, tuple[Task, ...]]] = {
     "reading_meaning": {"default": READING_A2, "plus": READING_PLUS},
     "natural_reply": {"default": NATURAL_A2, "plus": NATURAL_PLUS},
     "writing_build": {"default": WRITING_A2, "plus": WRITING_PLUS},
+    "past_events": {"default": PAST_EVENTS, "plus": PAST_EVENTS},
+    "story_order": {"default": STORY_ORDER, "plus": STORY_ORDER},
+    "future_plans": {"default": FUTURE_PLANS, "plus": FUTURE_PLANS},
+    "choice_move": {"default": CHOICE_MOVE, "plus": CHOICE_MOVE},
+    "event_reading": {"default": EVENT_READING, "plus": EVENT_READING},
+    "precise_reply": {"default": PRECISE_REPLY, "plus": PRECISE_REPLY},
+    "writing_past_future": {"default": WRITING_PAST_FUTURE, "plus": WRITING_PAST_FUTURE},
+    "tense_pressure": {"default": TENSE_PRESSURE, "plus": TENSE_PRESSURE},
 }
 
 CHECKPOINT_LEVEL_TASKS: dict[str, dict[str, tuple[Task, ...]]] = {
     "daily_routine": {"default": CHECK_A2, "plus": CHECK_PLUS},
+    "movement_control": {"default": CHECK2_A2, "plus": CHECK2_PLUS},
 }
 
 
@@ -615,8 +904,31 @@ DAILY_ROUTINE_CHAPTER = Chapter(
     ),
 )
 
+MOVEMENT_CONTROL_CHAPTER = Chapter(
+    id="movement_control",
+    title="Глава 2. Движение и контроль",
+    description="Здесь уже идем дальше базы: прошлое, планы, выбор хода, смысл текста и более собранные ответы под давлением.",
+    missions=(
+        Mission("past_events", "Миссия 1. Что было вчера", "Собираем Past Simple так, чтобы прошлые события звучали ровно, без каши и кривых форм.", 65, PAST_EVENTS),
+        Mission("story_order", "Миссия 2. История без каши", "Учимся держать порядок событий и выстраивать короткие истории так, чтобы они были понятны сразу.", 70, STORY_ORDER),
+        Mission("future_plans", "Миссия 3. Планы без тумана", "Прокачиваем `going to` и говорим о планах так, чтобы это звучало спокойно и уверенно.", 70, FUTURE_PLANS),
+        Mission("choice_move", "Миссия 4. Выбери ход", "Живые диалоги про предложения, переносы, выбор и короткие решения без деревянных ответов.", 75, CHOICE_MOVE),
+        Mission("event_reading", "Миссия 5. Поймай смысл", "Короткие истории и выводы по событиям: важно не просто читать, а понимать, что произошло и почему.", 80, EVENT_READING),
+        Mission("precise_reply", "Миссия 6. Скажи точнее", "Делаем ответы сильнее: меньше обрубков, больше точности, причин и нормальной логики.", 80, PRECISE_REPLY),
+        Mission("writing_past_future", "Миссия 7. Мини-письмо: вчера и завтра", "Собираем короткие письменные ответы про прошлые события и будущие планы без развала по дороге.", 85, WRITING_PAST_FUTURE),
+        Mission("tense_pressure", "Миссия 8. Времена под давлением", "Переключаемся между привычками, прошлым и планами так, чтобы не путаться под нагрузкой.", 85, TENSE_PRESSURE),
+    ),
+    boss=Boss(
+        id="movement_control_checkpoint",
+        title="Финальный чек главы",
+        description="Финальный заход по второй главе: тут уже важны не только формы, но и уверенность в выборе, смысл и контроль под давлением.",
+        xp_reward=110,
+        tasks=CHECK2_A2,
+    ),
+)
 
-CHAPTERS: tuple[Chapter, ...] = (DAILY_ROUTINE_CHAPTER,)
+
+CHAPTERS: tuple[Chapter, ...] = (DAILY_ROUTINE_CHAPTER, MOVEMENT_CONTROL_CHAPTER)
 
 
 def get_level_bucket(level: str | None) -> str:
@@ -629,6 +941,15 @@ def get_chapter(chapter_id: str) -> Chapter:
     for chapter in CHAPTERS:
         if chapter.id == chapter_id:
             return chapter
+    raise KeyError(f"Unknown chapter id: {chapter_id}")
+
+
+def get_next_chapter_after(chapter_id: str) -> Chapter | None:
+    for index, chapter in enumerate(CHAPTERS):
+        if chapter.id == chapter_id:
+            if index + 1 < len(CHAPTERS):
+                return CHAPTERS[index + 1]
+            return None
     raise KeyError(f"Unknown chapter id: {chapter_id}")
 
 

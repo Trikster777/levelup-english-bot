@@ -4,7 +4,7 @@ import sqlite3
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from .content import CHAPTERS, Boss, Chapter, Mission, Task, get_chapter, get_placement_tasks, iter_all_tasks
+from .content import CHAPTERS, Boss, Chapter, Mission, Task, get_chapter, get_next_chapter_after, get_placement_tasks, iter_all_tasks
 
 
 @dataclass(slots=True)
@@ -219,7 +219,13 @@ def complete_mission(connection: sqlite3.Connection, telegram_user_id: int, miss
     connection.commit()
 
 
-def complete_boss(connection: sqlite3.Connection, telegram_user_id: int, boss: Boss, correct_answers: int) -> None:
+def complete_boss(
+    connection: sqlite3.Connection,
+    telegram_user_id: int,
+    chapter_id: str,
+    boss: Boss,
+    correct_answers: int,
+) -> Chapter | None:
     score = round(correct_answers / len(boss.tasks) * 100)
     connection.execute(
         """
@@ -233,7 +239,14 @@ def complete_boss(connection: sqlite3.Connection, telegram_user_id: int, boss: B
         (telegram_user_id, boss.id, score, datetime.utcnow().isoformat()),
     )
     add_xp(connection, telegram_user_id, boss.xp_reward)
+    next_chapter = get_next_chapter_after(chapter_id)
+    if next_chapter is not None:
+        connection.execute(
+            "UPDATE users SET current_chapter_id = ? WHERE telegram_user_id = ?",
+            (next_chapter.id, telegram_user_id),
+        )
     connection.commit()
+    return next_chapter
 
 
 def add_review_item(connection: sqlite3.Connection, telegram_user_id: int, task: Task, source_type: str) -> None:

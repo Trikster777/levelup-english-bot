@@ -634,13 +634,20 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             add_review_item(connection, callback.from_user.id, task, "boss")
         state.task_index += 1
         if state.task_index >= len(boss_tasks):
-            complete_boss(connection, callback.from_user.id, boss, state.correct_answers)
+            next_chapter = complete_boss(connection, callback.from_user.id, state.chapter_id, boss, state.correct_answers)
             session_store.pop(callback.from_user.id, None)
             await callback.message.answer(build_boss_result(state.correct_answers, len(boss_tasks), boss.xp_reward))
             ai_summary = await generate_ai_summary("boss", boss.title, f"{state.correct_answers}/{len(boss_tasks)}, награда {boss.xp_reward} XP")
             if ai_summary:
                 await callback.message.answer(ai_summary)
-            await bot.send_message(callback.message.chat.id, "Если хочешь, можешь теперь просто написать мне любой вопрос по английскому.")
+            if next_chapter is not None:
+                await bot.send_message(
+                    callback.message.chat.id,
+                    f"<b>Новая глава открыта.</b>\n\nТеперь у тебя открыта <b>{next_chapter.title}</b>.\nДальше уже будет больше прошлого, планов и контроля под давлением.",
+                    reply_markup=action_keyboard("nav:mission", "Открыть новую главу"),
+                )
+            else:
+                await bot.send_message(callback.message.chat.id, "Если хочешь, можешь теперь просто написать мне любой вопрос по английскому.")
         else:
             await send_next_task(callback.message.chat.id, callback.from_user.id)
 
