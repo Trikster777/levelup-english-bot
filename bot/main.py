@@ -9,7 +9,7 @@ from aiogram.filters import Command
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from .config import get_settings
-from .content import Task, get_boss
+from .content import Task, get_boss, get_boss_tasks, get_mission_tasks
 from .db import create_connection
 from .gemini import GeminiClient, build_summary_prompt, build_tutor_prompt
 from .logic import (
@@ -36,6 +36,7 @@ from .logic import (
     get_profile_text,
     get_review_tasks,
     get_task_prompt,
+    get_user_level,
     is_boss_completed,
     is_boss_unlocked,
     is_placement_completed,
@@ -136,7 +137,7 @@ def home_keyboard() -> InlineKeyboardMarkup:
             ],
             [
                 InlineKeyboardButton(text="Реванш", callback_data="nav:review"),
-                InlineKeyboardButton(text="Босс", callback_data="nav:boss"),
+                InlineKeyboardButton(text="Финальный чек", callback_data="nav:boss"),
             ],
             [InlineKeyboardButton(text="Сбросить прогресс", callback_data="nav:restart")],
         ]
@@ -153,7 +154,7 @@ def mission_complete_keyboard(user_id: int, accuracy: int) -> InlineKeyboardMark
         if next_mission is not None:
             buttons[0].append(InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}"))
         else:
-            buttons[0].append(InlineKeyboardButton(text="К боссу", callback_data="boss:start"))
+            buttons[0].append(InlineKeyboardButton(text="К финальному чеку", callback_data="boss:start"))
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
@@ -201,7 +202,7 @@ async def show_mission(chat_id: int, user_id: int, first_name: str) -> None:
         await bot.send_message(
             chat_id,
             build_chapter_complete_text(get_chapter_summary(connection, user_id)),
-            reply_markup=action_keyboard("boss:start", "Открыть босса"),
+            reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
         )
         return
 
@@ -268,14 +269,16 @@ async def send_next_task(chat_id: int, user_id: int) -> None:
 
     if state.mode == "mission":
         mission = next(mission for mission in get_current_chapter(connection, user_id).missions if mission.id == state.content_id)
-        task = mission.tasks[state.task_index]
-        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(mission.tasks), mission.title), reply_markup=answer_keyboard(task, "mission_answer"))
+        mission_tasks = get_mission_tasks(state.chapter_id, mission.id, get_user_level(connection, user_id))
+        task = mission_tasks[state.task_index]
+        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(mission_tasks), mission.title), reply_markup=answer_keyboard(task, "mission_answer"))
         return
 
     if state.mode == "boss":
         boss = get_boss(state.chapter_id)
-        task = boss.tasks[state.task_index]
-        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(boss.tasks), boss.title), reply_markup=answer_keyboard(task, "boss_answer"))
+        boss_tasks = get_boss_tasks(state.chapter_id, get_user_level(connection, user_id))
+        task = boss_tasks[state.task_index]
+        await bot.send_message(chat_id, get_task_prompt(task, state.task_index + 1, len(boss_tasks), boss.title), reply_markup=answer_keyboard(task, "boss_answer"))
         return
 
     if state.mode == "placement":
@@ -297,7 +300,7 @@ async def send_next_task(chat_id: int, user_id: int) -> None:
 async def send_next_mission_offer(chat_id: int, user_id: int) -> None:
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть босса"))
+        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
         return
     await bot.send_message(chat_id, build_next_mission_text(next_mission), reply_markup=action_keyboard(f"mission:start:{next_mission.id}", "Идти дальше"))
 
@@ -306,7 +309,7 @@ async def start_next_mission(chat_id: int, user_id: int, first_name: str) -> Non
     bootstrap_user(user_id, first_name)
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть босса"))
+        await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
         return
     session_store[user_id] = SessionState(
         mode="mission",
@@ -530,7 +533,8 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
 
     elif prefix == "mission_answer":
         mission = next(mission for mission in get_current_chapter(connection, callback.from_user.id).missions if mission.id == state.content_id)
-        task = mission.tasks[state.task_index]
+        mission_tasks = get_mission_tasks(state.chapter_id, mission.id, get_user_level(connection, callback.from_user.id))
+        task = mission_tasks[state.task_index]
         is_correct = answer_index == task.correct_index
         await callback.message.answer(build_feedback_detailed(is_correct, task))
         if is_correct:
@@ -538,15 +542,15 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         else:
             add_review_item(connection, callback.from_user.id, task, "mission")
         state.task_index += 1
-        if state.task_index >= len(mission.tasks):
+        if state.task_index >= len(mission_tasks):
             complete_mission(connection, callback.from_user.id, mission, state.correct_answers)
             session_store.pop(callback.from_user.id, None)
-            accuracy = round(state.correct_answers / len(mission.tasks) * 100) if mission.tasks else 0
+            accuracy = round(state.correct_answers / len(mission_tasks) * 100) if mission_tasks else 0
             await callback.message.answer(
-                build_mission_result_detailed(state.correct_answers, len(mission.tasks), mission.xp_reward),
+                build_mission_result_detailed(state.correct_answers, len(mission_tasks), mission.xp_reward),
                 reply_markup=mission_complete_keyboard(callback.from_user.id, accuracy),
             )
-            ai_summary = await generate_ai_summary("mission", mission.title, f"{state.correct_answers}/{len(mission.tasks)}, награда {mission.xp_reward} XP")
+            ai_summary = await generate_ai_summary("mission", mission.title, f"{state.correct_answers}/{len(mission_tasks)}, награда {mission.xp_reward} XP")
             if ai_summary:
                 await callback.message.answer(ai_summary)
         else:
@@ -554,7 +558,8 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
 
     elif prefix == "boss_answer":
         boss = get_boss(state.chapter_id)
-        task = boss.tasks[state.task_index]
+        boss_tasks = get_boss_tasks(state.chapter_id, get_user_level(connection, callback.from_user.id))
+        task = boss_tasks[state.task_index]
         is_correct = answer_index == task.correct_index
         await callback.message.answer(build_feedback_detailed(is_correct, task))
         if is_correct:
@@ -562,11 +567,11 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         else:
             add_review_item(connection, callback.from_user.id, task, "boss")
         state.task_index += 1
-        if state.task_index >= len(boss.tasks):
+        if state.task_index >= len(boss_tasks):
             complete_boss(connection, callback.from_user.id, boss, state.correct_answers)
             session_store.pop(callback.from_user.id, None)
-            await callback.message.answer(build_boss_result(state.correct_answers, len(boss.tasks), boss.xp_reward))
-            ai_summary = await generate_ai_summary("boss", boss.title, f"{state.correct_answers}/{len(boss.tasks)}, награда {boss.xp_reward} XP")
+            await callback.message.answer(build_boss_result(state.correct_answers, len(boss_tasks), boss.xp_reward))
+            ai_summary = await generate_ai_summary("boss", boss.title, f"{state.correct_answers}/{len(boss_tasks)}, награда {boss.xp_reward} XP")
             if ai_summary:
                 await callback.message.answer(ai_summary)
             await bot.send_message(callback.message.chat.id, "Если хочешь, можешь теперь просто написать мне любой вопрос по английскому.")

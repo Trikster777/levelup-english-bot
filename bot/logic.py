@@ -4,7 +4,7 @@ import sqlite3
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from .content import CHAPTERS, Boss, Chapter, Mission, Task, get_chapter, get_placement_tasks
+from .content import CHAPTERS, Boss, Chapter, Mission, Task, get_chapter, get_placement_tasks, iter_all_tasks
 
 
 @dataclass(slots=True)
@@ -61,6 +61,13 @@ def get_user_profile(connection: sqlite3.Connection, telegram_user_id: int) -> s
         "SELECT * FROM users WHERE telegram_user_id = ?",
         (telegram_user_id,),
     ).fetchone()
+
+
+def get_user_level(connection: sqlite3.Connection, telegram_user_id: int) -> str:
+    row = get_user_profile(connection, telegram_user_id)
+    if row is None:
+        return "A2"
+    return row["estimated_level"] or "A2"
 
 
 def is_placement_completed(connection: sqlite3.Connection, telegram_user_id: int) -> bool:
@@ -260,13 +267,7 @@ def get_review_tasks(connection: sqlite3.Connection, telegram_user_id: int) -> l
         (telegram_user_id,),
     ).fetchall()
 
-    tasks_by_id = {}
-    for chapter in CHAPTERS:
-        for mission in chapter.missions:
-            for task in mission.tasks:
-                tasks_by_id[task.id] = task
-        for task in chapter.boss.tasks:
-            tasks_by_id[task.id] = task
+    tasks_by_id = {task.id: task for task in iter_all_tasks()}
 
     return [tasks_by_id[row["task_id"]] for row in rows if row["task_id"] in tasks_by_id]
 
