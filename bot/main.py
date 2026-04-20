@@ -84,6 +84,25 @@ async def generate_error_coach(stage: str, task: Task, chosen_answer: str) -> st
     return await asyncio.to_thread(gemini_client.generate_text, prompt)
 
 
+async def send_typing(chat_id: int) -> None:
+    await bot.send_chat_action(chat_id, "typing")
+
+
+async def generate_ai_summary_with_typing(chat_id: int, kind: str, title: str, score_text: str) -> str | None:
+    await send_typing(chat_id)
+    return await generate_ai_summary(kind, title, score_text)
+
+
+async def ask_tutor_with_typing(chat_id: int, question: str) -> str | None:
+    await send_typing(chat_id)
+    return await ask_tutor(question)
+
+
+async def generate_error_coach_with_typing(chat_id: int, stage: str, task: Task, chosen_answer: str) -> str | None:
+    await send_typing(chat_id)
+    return await generate_error_coach(stage, task, chosen_answer)
+
+
 def local_tutor_fallback(question: str) -> str | None:
     q = question.lower().strip()
 
@@ -599,7 +618,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             apply_level_routing(connection, callback.from_user.id, level)
             session_store.pop(callback.from_user.id, None)
             await callback.message.answer(build_placement_result(state.correct_answers, len(tasks), level))
-            ai_summary = await generate_ai_summary("placement", "Стартовый тест", f"{state.correct_answers}/{len(tasks)}, уровень {level}")
+            ai_summary = await generate_ai_summary_with_typing(
+                callback.message.chat.id,
+                "placement",
+                "Стартовый тест",
+                f"{state.correct_answers}/{len(tasks)}, уровень {level}",
+            )
             if ai_summary:
                 await callback.message.answer(ai_summary)
             await start_next_mission(callback.message.chat.id, callback.from_user.id, callback.from_user.first_name or "Player")
@@ -617,7 +641,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             state.correct_answers += 1
         else:
             add_review_item(connection, callback.from_user.id, task, "mission")
-            ai_error = await generate_error_coach("mission", task, task.options[answer_index])
+            ai_error = await generate_error_coach_with_typing(
+                callback.message.chat.id,
+                "mission",
+                task,
+                task.options[answer_index],
+            )
             if ai_error:
                 await callback.message.answer(ai_error)
         state.task_index += 1
@@ -629,7 +658,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
                 build_mission_result_detailed(state.correct_answers, len(mission_tasks), mission.xp_reward),
                 reply_markup=mission_complete_keyboard(callback.from_user.id, accuracy),
             )
-            ai_summary = await generate_ai_summary("mission", mission.title, f"{state.correct_answers}/{len(mission_tasks)}, награда {mission.xp_reward} XP")
+            ai_summary = await generate_ai_summary_with_typing(
+                callback.message.chat.id,
+                "mission",
+                mission.title,
+                f"{state.correct_answers}/{len(mission_tasks)}, награда {mission.xp_reward} XP",
+            )
             if ai_summary:
                 await callback.message.answer(ai_summary)
         else:
@@ -648,7 +682,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             callback_notice = "Принято"
         else:
             add_review_item(connection, callback.from_user.id, task, "boss")
-            ai_error = await generate_error_coach("final_check", task, task.options[answer_index])
+            ai_error = await generate_error_coach_with_typing(
+                callback.message.chat.id,
+                "final_check",
+                task,
+                task.options[answer_index],
+            )
             if ai_error:
                 await callback.message.answer(ai_error)
         state.task_index += 1
@@ -656,7 +695,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             next_chapter = complete_boss(connection, callback.from_user.id, state.chapter_id, boss, state.correct_answers)
             session_store.pop(callback.from_user.id, None)
             await callback.message.answer(build_boss_result(state.correct_answers, len(boss_tasks), boss.xp_reward))
-            ai_summary = await generate_ai_summary("boss", boss.title, f"{state.correct_answers}/{len(boss_tasks)}, награда {boss.xp_reward} XP")
+            ai_summary = await generate_ai_summary_with_typing(
+                callback.message.chat.id,
+                "boss",
+                boss.title,
+                f"{state.correct_answers}/{len(boss_tasks)}, награда {boss.xp_reward} XP",
+            )
             if ai_summary:
                 await callback.message.answer(ai_summary)
             if next_chapter is not None:
@@ -687,7 +731,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             state.correct_answers += 1
             callback_notice = "Принято"
         else:
-            ai_error = await generate_error_coach("review", task, task.options[answer_index])
+            ai_error = await generate_error_coach_with_typing(
+                callback.message.chat.id,
+                "review",
+                task,
+                task.options[answer_index],
+            )
             if ai_error:
                 await callback.message.answer(ai_error)
         state.task_index += 1
@@ -741,7 +790,7 @@ async def fallback(message: Message) -> None:
             await message.answer(local_answer, reply_markup=home_keyboard())
         return
 
-    answer = await ask_tutor(message.text or "")
+    answer = await ask_tutor_with_typing(message.chat.id, message.text or "")
     if answer:
         if user_id in session_store:
             await message.answer(
@@ -752,7 +801,10 @@ async def fallback(message: Message) -> None:
             await message.answer(answer, reply_markup=home_keyboard())
         return
 
-    short_answer = await ask_tutor(f"Ответь очень коротко и просто без списков: {message.text or ''}")
+    short_answer = await ask_tutor_with_typing(
+        message.chat.id,
+        f"Ответь очень коротко и просто без списков: {message.text or ''}",
+    )
     if short_answer:
         if user_id in session_store:
             await message.answer(
