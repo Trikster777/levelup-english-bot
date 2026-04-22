@@ -157,11 +157,29 @@ def action_keyboard(start_callback: str, text: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=text, callback_data=start_callback)]])
 
 
-def answer_keyboard(task: Task, prefix: str) -> InlineKeyboardMarkup:
+def answer_keyboard(
+    task: Task,
+    prefix: str,
+    *,
+    selected_index: int | None = None,
+    reveal_result: bool = False,
+) -> InlineKeyboardMarkup:
     option_marks = ("A", "B", "C", "D", "E", "F")
     return InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=option_marks[idx], callback_data=f"{prefix}:{idx}")]
+            [
+                InlineKeyboardButton(
+                    text=option_marks[idx],
+                    callback_data="noop" if reveal_result else f"{prefix}:{idx}",
+                    style=(
+                        "success"
+                        if reveal_result and idx == task.correct_index
+                        else "danger"
+                        if reveal_result and selected_index == idx and idx != task.correct_index
+                        else None
+                    ),
+                )
+            ]
             for idx, _option in enumerate(task.options)
         ]
     )
@@ -627,6 +645,11 @@ async def resume_current(callback: CallbackQuery) -> None:
     await callback.answer()
 
 
+@dp.callback_query(F.data == "noop")
+async def noop_callback(callback: CallbackQuery) -> None:
+    await callback.answer()
+
+
 async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
     state = session_store.get(callback.from_user.id)
     if state is None:
@@ -636,9 +659,12 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
     answer_index = int(callback.data.split(":")[-1])
     callback_notice = ""
 
+    current_task: Task | None = None
+
     if prefix == "placement_answer":
         tasks = get_placement_items()
         task = tasks[state.task_index]
+        current_task = task
         is_correct = answer_index == task.correct_index
         if is_correct:
             state.correct_answers += 1
@@ -665,6 +691,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         mission = next(mission for mission in get_current_chapter(connection, callback.from_user.id).missions if mission.id == state.content_id)
         mission_tasks = get_mission_tasks(state.chapter_id, mission.id, get_user_level(connection, callback.from_user.id))
         task = mission_tasks[state.task_index]
+        current_task = task
         is_correct = answer_index == task.correct_index
         await callback.message.answer(build_mission_feedback(is_correct, task))
         if is_correct:
@@ -703,6 +730,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         boss = get_boss(state.chapter_id)
         boss_tasks = get_boss_tasks(state.chapter_id, get_user_level(connection, callback.from_user.id))
         task = boss_tasks[state.task_index]
+        current_task = task
         is_correct = answer_index == task.correct_index
         checkpoint_feedback = build_checkpoint_feedback(is_correct, task)
         if checkpoint_feedback:
@@ -752,6 +780,7 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
             await callback.answer()
             return
         task = tasks[state.task_index]
+        current_task = task
         is_correct = answer_index == task.correct_index
         checkpoint_feedback = build_checkpoint_feedback(is_correct, task)
         if checkpoint_feedback:
@@ -780,6 +809,22 @@ async def handle_answer(callback: CallbackQuery, prefix: str) -> None:
         else:
             await send_next_task(callback.message.chat.id, callback.from_user.id)
 
+    if current_task is not None and callback.message is not None:
+        try:
+            await callback.message.edit_reply_markup(
+                reply_markup=answer_keyboard(
+                    current_task,
+                    prefix,
+                    selected_index=answer_index,
+                    reveal_result=True,
+                )
+            )
+            await asyncio.sleep(0.45)
+        except Exception:
+            pass
+
+    if not callback_notice and current_task is not None and answer_index == current_task.correct_index:
+        callback_notice = "🎉"
     await callback.answer(callback_notice)
 
 
