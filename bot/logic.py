@@ -418,11 +418,11 @@ def build_feedback_detailed(is_correct: bool, task: Task) -> str:
         [
             "<b>Не засчитано.</b>",
             "",
-            f"<b>Правильный вариант:</b> {correct_answer}",
+            f"<b>Нужный вариант:</b> {correct_answer}",
             "",
-            f"<b>Почему так:</b> {task.explanation}",
+            f"<b>Суть:</b> {task.explanation}",
             "",
-            "Запомни этот ход и поехали дальше.",
+            "Теперь логика должна собраться. Идём дальше.",
         ]
     )
 

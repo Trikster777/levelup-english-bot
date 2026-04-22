@@ -902,7 +902,7 @@ async def fallback(message: Message) -> None:
         return
 
     await message.answer(
-        "<b>Я не завис, просто не смог нормально ответить.</b>\n\nПопробуй переформулировать вопрос попроще.",
+        "<b>Сейчас AI-ответ не добрался.</b>\n\nУ Gemini либо перегруз, либо он упёрся в лимит. Попробуй повторить вопрос чуть позже или спроси проще.",
         reply_markup=continue_keyboard() if user_id in session_store else home_keyboard(),
     )
 
