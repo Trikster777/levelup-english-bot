@@ -435,8 +435,6 @@ def build_mission_success_feedback(task: Task) -> str:
             "",
             f"<b>Правильный вариант:</b> {correct_answer}",
             "",
-            f"<b>Почему это работает:</b> {task.explanation}",
-            "",
             "Всё, молодец. Двигаемся дальше.",
         ]
     )
