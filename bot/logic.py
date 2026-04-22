@@ -3,6 +3,7 @@ from __future__ import annotations
 import sqlite3
 from dataclasses import dataclass
 from datetime import date, datetime
+from html import escape
 
 from .content import CHAPTERS, Boss, Chapter, Mission, Task, get_chapter, get_next_chapter_after, get_placement_tasks, iter_all_tasks
 
@@ -363,7 +364,9 @@ def get_chapter_summary(connection: sqlite3.Connection, telegram_user_id: int) -
 
 
 def get_task_prompt(task: Task, position: int, total: int, heading: str) -> str:
-    return "\n".join([f"<b>{heading}</b>", f"<b>Задание {position}/{total}</b>", "", task.prompt])
+    option_marks = ("A", "B", "C", "D", "E", "F")
+    option_lines = [f"<b>{option_marks[idx]}.</b> {escape(option)}" for idx, option in enumerate(task.options)]
+    return "\n".join([f"<b>{heading}</b>", f"<b>Задание {position}/{total}</b>", "", task.prompt, "", *option_lines])
 
 
 def build_mission_intro(mission: Mission) -> str:

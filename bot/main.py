@@ -158,8 +158,12 @@ def action_keyboard(start_callback: str, text: str) -> InlineKeyboardMarkup:
 
 
 def answer_keyboard(task: Task, prefix: str) -> InlineKeyboardMarkup:
+    option_marks = ("A", "B", "C", "D", "E", "F")
     return InlineKeyboardMarkup(
-        inline_keyboard=[[InlineKeyboardButton(text=option[:60], callback_data=f"{prefix}:{idx}")] for idx, option in enumerate(task.options)]
+        inline_keyboard=[
+            [InlineKeyboardButton(text=option_marks[idx], callback_data=f"{prefix}:{idx}")]
+            for idx, _option in enumerate(task.options)
+        ]
     )
 
 
