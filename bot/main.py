@@ -182,21 +182,22 @@ def home_keyboard() -> InlineKeyboardMarkup:
     )
 
 
+def continue_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[[InlineKeyboardButton(text="Продолжить", callback_data="resume:current")]]
+    )
+
+
 def mission_complete_keyboard(user_id: int, accuracy: int) -> InlineKeyboardMarkup:
     next_mission = get_next_mission(connection, user_id)
     pending = get_review_count(connection, user_id)
     buttons: list[list[InlineKeyboardButton]] = []
 
-    if next_mission is not None:
-        row: list[InlineKeyboardButton] = []
-        if pending > 0:
-            review_label = "Разобрать ошибку" if pending == 1 else f"Разобрать ошибки ({pending})"
-            row.append(InlineKeyboardButton(text=review_label, callback_data="review:start"))
-        row.append(InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}"))
-        buttons.append(row)
-    elif pending > 0:
+    if pending > 0:
         review_label = "Разобрать ошибку" if pending == 1 else f"Разобрать ошибки ({pending})"
         buttons.append([InlineKeyboardButton(text=review_label, callback_data="review:start")])
+    elif next_mission is not None:
+        buttons.append([InlineKeyboardButton(text="Следующая миссия", callback_data=f"mission:start:{next_mission.id}")])
     else:
         buttons.append([InlineKeyboardButton(text="К финальному чеку", callback_data="boss:start")])
 
@@ -241,22 +242,22 @@ async def show_mission(chat_id: int, user_id: int, first_name: str) -> None:
         )
         return
 
+    if has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        await bot.send_message(
+            chat_id,
+            f"<b>Дальше не пущу, пока не добьем ошибки.</b>\n\nСейчас у тебя висит {pending} слабых мест из прошлой миссии. Сначала закрываем их, потом открываем следующий заход.",
+            reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})" if pending > 1 else "Разобрать ошибку"),
+        )
+        return
+
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        if has_review_tasks(connection, user_id):
-            pending = get_review_count(connection, user_id)
-            await bot.send_message(
-                chat_id,
-                build_chapter_complete_text(get_chapter_summary(connection, user_id))
-                + f"\n\n<b>Перед финальным чеком:</b> добей {pending} ошибок, которые накопились по ходу главы.",
-                reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
-            )
-        else:
-            await bot.send_message(
-                chat_id,
-                build_chapter_complete_text(get_chapter_summary(connection, user_id)),
-                reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
-            )
+        await bot.send_message(
+            chat_id,
+            build_chapter_complete_text(get_chapter_summary(connection, user_id)),
+            reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
+        )
         return
 
     await bot.send_message(
@@ -382,18 +383,22 @@ async def send_next_mission_offer(chat_id: int, user_id: int) -> None:
 
 async def start_next_mission(chat_id: int, user_id: int, first_name: str) -> None:
     bootstrap_user(user_id, first_name)
+    if has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        await bot.send_message(
+            chat_id,
+            f"<b>Стоп.</b>\n\nПеред следующей миссией сначала добиваем {pending} ошибок из прошлого захода.",
+            reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})" if pending > 1 else "Разобрать ошибку"),
+        )
+        return
+
     next_mission = get_next_mission(connection, user_id)
     if next_mission is None:
-        if has_review_tasks(connection, user_id):
-            pending = get_review_count(connection, user_id)
-            await bot.send_message(
-                chat_id,
-                build_chapter_complete_text(get_chapter_summary(connection, user_id))
-                + f"\n\n<b>Дальше по сценарию:</b> разбираем {pending} ошибок и только потом идем в финальный чек.",
-                reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})"),
-            )
-        else:
-            await bot.send_message(chat_id, build_chapter_complete_text(get_chapter_summary(connection, user_id)), reply_markup=action_keyboard("boss:start", "Открыть финальный чек"))
+        await bot.send_message(
+            chat_id,
+            build_chapter_complete_text(get_chapter_summary(connection, user_id)),
+            reply_markup=action_keyboard("boss:start", "Открыть финальный чек"),
+        )
         return
     session_store[user_id] = SessionState(
         mode="mission",
@@ -570,6 +575,14 @@ async def mission_start(callback: CallbackQuery) -> None:
     user_id = callback.from_user.id
     first_name = callback.from_user.first_name or "Player"
     bootstrap_user(user_id, first_name)
+    if has_review_tasks(connection, user_id):
+        pending = get_review_count(connection, user_id)
+        await callback.message.answer(
+            f"<b>Сначала работа над ошибками.</b>\n\nУ тебя висит {pending} ошибок. Закрываем их и только потом идем в следующую миссию.",
+            reply_markup=action_keyboard("review:start", f"Разобрать ошибки ({pending})" if pending > 1 else "Разобрать ошибку"),
+        )
+        await callback.answer()
+        return
     mission_id = callback.data.split(":")[-1]
     session_store[user_id] = SessionState(mode="mission", chapter_id=get_current_chapter(connection, user_id).id, content_id=mission_id)
     await callback.message.answer("<b>Заходим в миссию.</b>")
@@ -598,6 +611,19 @@ async def boss_start(callback: CallbackQuery) -> None:
     session_store[user_id] = SessionState(mode="boss", chapter_id=chapter.id, content_id=chapter.boss.id)
     await callback.message.answer("<b>Окей. Врубаем финальный чек.</b>")
     await send_next_task(callback.message.chat.id, user_id)
+    await callback.answer()
+
+
+@dp.callback_query(F.data == "resume:current")
+async def resume_current(callback: CallbackQuery) -> None:
+    state = session_store.get(callback.from_user.id)
+    if state is None:
+        await callback.message.answer("<b>Активного захода сейчас нет.</b>", reply_markup=home_keyboard())
+        await callback.answer()
+        return
+
+    await callback.message.answer("<b>Возвращаю тебя обратно.</b>")
+    await send_next_task(callback.message.chat.id, callback.from_user.id)
     await callback.answer()
 
 
@@ -788,7 +814,7 @@ async def fallback(message: Message) -> None:
         if user_id in session_store:
             await message.answer(
                 local_answer + "\n\n<b>Текущий заход не слетел.</b> Можешь спокойно вернуться к миссии, когда захочешь.",
-                reply_markup=home_keyboard(),
+                reply_markup=continue_keyboard(),
             )
         else:
             await message.answer(local_answer, reply_markup=home_keyboard())
@@ -799,7 +825,7 @@ async def fallback(message: Message) -> None:
         if user_id in session_store:
             await message.answer(
                 answer + "\n\n<b>Текущий заход я не сбрасывал.</b> Когда захочешь, просто продолжай по кнопкам.",
-                reply_markup=home_keyboard(),
+                reply_markup=continue_keyboard(),
             )
         else:
             await message.answer(answer, reply_markup=home_keyboard())
@@ -813,7 +839,7 @@ async def fallback(message: Message) -> None:
         if user_id in session_store:
             await message.answer(
                 short_answer + "\n\n<b>Текущий заход сохранен.</b> Можешь вернуться к нему в любой момент.",
-                reply_markup=home_keyboard(),
+                reply_markup=continue_keyboard(),
             )
         else:
             await message.answer(short_answer, reply_markup=home_keyboard())
@@ -824,15 +850,15 @@ async def fallback(message: Message) -> None:
         if user_id in session_store:
             await message.answer(
                 local_answer + "\n\n<b>Сценарий миссии не сброшен.</b> Можешь продолжить дальше, когда захочешь.",
-                reply_markup=home_keyboard(),
+                reply_markup=continue_keyboard(),
             )
         else:
             await message.answer(local_answer, reply_markup=home_keyboard())
         return
 
     await message.answer(
-        "<b>Я не завис, просто не смог нормально ответить.</b>\n\nПопробуй переформулировать вопрос попроще или нажми кнопки ниже.",
-        reply_markup=home_keyboard(),
+        "<b>Я не завис, просто не смог нормально ответить.</b>\n\nПопробуй переформулировать вопрос попроще.",
+        reply_markup=continue_keyboard() if user_id in session_store else home_keyboard(),
     )
 
 
